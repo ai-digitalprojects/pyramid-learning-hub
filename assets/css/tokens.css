@@ -1,0 +1,168 @@
+/* ============================================================
+   מסע אל הפירמידה — Design tokens
+   Single source of truth for colour, type, spacing, radius, shadow.
+   Nothing below this file should hard-code a colour or a size.
+   ============================================================ */
+
+:root {
+  /* ---------- Colour: brand ---------- */
+  --ink:            #16233A;
+  --ink-soft:       #2C3B57;
+  --sand:           #FAF6EF;
+  --sand-deep:      #F1E9DC;
+  --surface:        #FFFFFF;
+  --surface-alt:    #FBFAF8;
+  --gold:           #E0A32E;
+  --gold-deep:      #B87F16;
+  --gold-wash:      #FDF4E0;
+
+  /* ---------- Colour: unit identity ---------- */
+  --unit-1:         #1F8A8C;
+  --unit-1-deep:    #14676A;
+  --unit-1-wash:    #E6F4F4;
+  --unit-2:         #C2571E;
+  --unit-2-deep:    #9A4315;
+  --unit-2-wash:    #FBEDE4;
+
+  /* ---------- Colour: state ---------- */
+  --success:        #1E7A4B;
+  --success-wash:   #E6F3EC;
+  --warn:           #B4451E;
+  --warn-wash:      #FBEBE5;
+  --info:           #2D5E9E;
+  --info-wash:      #E8EFF8;
+
+  /* ---------- Colour: text & lines ---------- */
+  --text:           #16233A;
+  --text-muted:     #5A6577;
+  --text-invert:    #FFFFFF;
+  --line:           #E2DCD1;
+  --line-strong:    #C8BFAE;
+
+  /* ---------- Typography ---------- */
+  --font-body:    "Rubik", "Segoe UI", "Arial Hebrew", Arial, sans-serif;
+  --font-display: "Secular One", "Rubik", "Segoe UI", Arial, sans-serif;
+
+  --fs-xs:   0.8125rem;   /* 13px */
+  --fs-sm:   0.9375rem;   /* 15px */
+  --fs-base: 1.0625rem;   /* 17px */
+  --fs-md:   1.1875rem;   /* 19px */
+  --fs-lg:   1.375rem;    /* 22px */
+  --fs-xl:   1.75rem;     /* 28px */
+  --fs-2xl:  2.25rem;     /* 36px */
+  --fs-3xl:  2.75rem;     /* 44px */
+
+  --lh-tight: 1.25;
+  --lh-body:  1.65;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.5rem;
+  --sp-6:  2rem;
+  --sp-7:  3rem;
+  --sp-8:  4rem;
+
+  /* ---------- Radius ---------- */
+  --r-sm:   8px;
+  --r-md:   14px;
+  --r-lg:   20px;
+  --r-pill: 999px;
+
+  /* ---------- Shadow ---------- */
+  --sh-1: 0 1px 2px rgba(22, 35, 58, .06), 0 2px 6px rgba(22, 35, 58, .05);
+  --sh-2: 0 2px 6px rgba(22, 35, 58, .08), 0 8px 20px rgba(22, 35, 58, .07);
+  --sh-3: 0 8px 28px rgba(22, 35, 58, .14);
+
+  /* ---------- Layout ---------- */
+  --page-max: 1100px;
+  --header-h: 64px;
+
+  /* ---------- Motion ---------- */
+  --ease:   cubic-bezier(.2, .7, .3, 1);
+  --dur-1:  150ms;
+  --dur-2:  250ms;
+  --dur-3:  400ms;
+
+  /* ---------- Focus ---------- */
+  --focus-ring: 3px solid var(--gold);
+  --focus-offset: 2px;
+
+  color-scheme: light;
+}
+
+/* ============================================================
+   Dark mode — token swap only. No component knows about it.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink:          #0E1626;
+    --ink-soft:     #1B2740;
+    --sand:         #121A28;
+    --sand-deep:    #0C131F;
+    --surface:      #1B2537;
+    --surface-alt:  #202C41;
+    --gold:         #F0BB55;
+    --gold-deep:    #D19B33;
+    --gold-wash:    #33291340;
+
+    --unit-1:       #45B3B5;
+    --unit-1-deep:  #6FD0D2;
+    --unit-1-wash:  #12333480;
+    --unit-2:       #E58147;
+    --unit-2-deep:  #F2A177;
+    --unit-2-wash:  #3A210F80;
+
+    --success:      #4FBF87;
+    --success-wash: #12301F80;
+    --warn:         #EE8A63;
+    --warn-wash:    #37170D80;
+    --info:         #7FAEE8;
+    --info-wash:    #14243B80;
+
+    --text:         #EDF1F7;
+    --text-muted:   #A6B2C4;
+    --text-invert:  #0E1626;
+    --line:         #2E3B52;
+    --line-strong:  #435473;
+
+    --sh-1: 0 1px 2px rgba(0, 0, 0, .35), 0 2px 6px rgba(0, 0, 0, .3);
+    --sh-2: 0 2px 6px rgba(0, 0, 0, .4),  0 8px 20px rgba(0, 0, 0, .35);
+    --sh-3: 0 8px 28px rgba(0, 0, 0, .5);
+
+    color-scheme: dark;
+  }
+}
+
+/* Explicit dark, if a toggle is ever added — must win in both directions. */
+:root[data-theme="dark"] {
+  --ink:          #0E1626;
+  --ink-soft:     #1B2740;
+  --sand:         #121A28;
+  --sand-deep:    #0C131F;
+  --surface:      #1B2537;
+  --surface-alt:  #202C41;
+  --gold:         #F0BB55;
+  --gold-deep:    #D19B33;
+  --gold-wash:    #33291340;
+  --unit-1:       #45B3B5;
+  --unit-1-deep:  #6FD0D2;
+  --unit-1-wash:  #12333480;
+  --unit-2:       #E58147;
+  --unit-2-deep:  #F2A177;
+  --unit-2-wash:  #3A210F80;
+  --success:      #4FBF87;
+  --success-wash: #12301F80;
+  --warn:         #EE8A63;
+  --warn-wash:    #37170D80;
+  --info:         #7FAEE8;
+  --info-wash:    #14243B80;
+  --text:         #EDF1F7;
+  --text-muted:   #A6B2C4;
+  --text-invert:  #0E1626;
+  --line:         #2E3B52;
+  --line-strong:  #435473;
+  color-scheme: dark;
+}

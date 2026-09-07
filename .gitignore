@@ -1,0 +1,66 @@
+# ─────────────────────────────────────────────────────────────
+#  Copyright-protected reference material — NEVER commit, NEVER publish
+# ─────────────────────────────────────────────────────────────
+source-materials/
+*.pdf
+*.PDF
+
+# Scanned / extracted page images from reference material
+page-extracts/
+*.scan.jpg
+*.scan.png
+
+# ─────────────────────────────────────────────────────────────
+#  Operating-system files
+# ─────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ─────────────────────────────────────────────────────────────
+#  Temporary / editor files
+# ─────────────────────────────────────────────────────────────
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+*.rej
+.cache/
+tmp/
+temp/
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.sublime-workspace
+
+# ─────────────────────────────────────────────────────────────
+#  Generated / build output (not used today; guarded for later)
+# ─────────────────────────────────────────────────────────────
+node_modules/
+dist/
+build/
+.parcel-cache/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.local
+
+# ─────────────────────────────────────────────────────────────
+#  Explicitly DO commit the vendored library (decision D4)
+# ─────────────────────────────────────────────────────────────
+!assets/js/vendor/
+!assets/js/vendor/**
