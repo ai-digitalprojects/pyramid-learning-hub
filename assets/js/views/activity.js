@@ -57,6 +57,25 @@
       el('div', {}, [ UI.stateChip(rec.state) ])
     ]);
 
+    /* ============================================================
+       אם קיימת מימוש אמיתי לפעילות — מציגים אותו,
+       בלי הודעת הבנייה ובלי כפתור הבדיקה הזמני.
+       ============================================================ */
+    var impl = App.activities && App.activities[act.id];
+    if (typeof impl === 'function') {
+      UI.clear(mount);
+      var page = el('div', { class: 'page' }, [nav, head]);
+      var slot = el('div', { class: 'activity-body' });
+      page.appendChild(slot);
+      mount.appendChild(page);
+
+      impl(slot, act, unit);
+
+      App.setTitle(act.title);
+      App.setNavCurrent(null);
+      return;
+    }
+
     /* ---------- הודעת בנייה ---------- */
     var buildNotice = el('div', { class: 'notice notice--build' }, [
       el('span', { class: 'notice__icon', 'aria-hidden': 'true', text: '🚧' }),

@@ -145,6 +145,41 @@
       });
     },
 
+    /** כתיבה מיידית לאחסון, בלי להמתין להשהיה. */
+    flushNow: function () {
+      if (writeTimer) { clearTimeout(writeTimer); writeTimer = null; }
+      flush();
+    },
+
+    /**
+     * רישום ניסיון שהושלם בפעילות מנוקדת.
+     * שומר: מצב השלמה, הציון האחרון, הציון הטוב ביותר ומספר הניסיונות.
+     * `score` המוצג ברשימות הוא הציון הטוב ביותר.
+     */
+    recordAttempt: function (id, score, max) {
+      var data = load();
+      var cur = data.activities[id] || {};
+      var best = (typeof cur.best === 'number') ? Math.max(cur.best, score) : score;
+      var first = (typeof cur.firstAttempt === 'number') ? cur.firstAttempt : score;
+
+      data.activities[id] = {
+        state: 'done',
+        score: best,                 // מוצג ברשימת הפעילויות ובדף ההתקדמות
+        max: max,
+        best: best,
+        last: score,
+        lastMax: max,
+        firstAttempt: first,
+        attempts: (cur.attempts || 0) + 1,
+        updatedAt: new Date().toISOString()
+      };
+
+      save();
+      this.flushNow();               // השלמת פעילות נשמרת מיד, לא בהשהיה
+      notify('activity:' + id);
+      return data.activities[id];
+    },
+
     clearActivity: function (id) {
       var data = load();
       delete data.activities[id];

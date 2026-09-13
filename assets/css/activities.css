@@ -1,0 +1,460 @@
+/* ============================================================
+   activities.css — סגנונות לפעילויות
+   ============================================================ */
+
+/* ============================================================
+   איורי גופים (SVG)
+   ============================================================ */
+.solid-svg {
+  display: block;
+  margin-inline: auto;
+  inline-size: 100%;
+  max-inline-size: 260px;
+  block-size: auto;
+}
+
+.solid-svg--wide { max-inline-size: 400px; }
+
+.sv-face { fill: var(--unit-1); fill-opacity: .16; }
+.sv-base { fill: var(--gold);   fill-opacity: .32; }
+
+.sv-edge {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* קווים נסתרים — מקווקו, כמקובל בשרטוט גופים */
+.sv-edge--hidden {
+  stroke-dasharray: 5 4;
+  stroke-opacity: .45;
+}
+
+.sv-apex { fill: var(--warn); }
+
+.sv-label {
+  fill: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.sv-leader {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 3;
+}
+
+.shape-figure {
+  margin: 0;
+  padding-block: var(--sp-4);
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================================
+   מסך ההסבר
+   ============================================================ */
+.activity-intro__text {
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  max-inline-size: 58ch;
+}
+
+/* ============================================================
+   כותרת השאלה והתקדמות
+   ============================================================ */
+.quiz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.quiz-head__count {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.quiz-dots { display: flex; gap: 6px; }
+
+.quiz-dot {
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: var(--r-pill);
+  background: var(--sand-deep);
+  border: 2px solid transparent;
+}
+
+.quiz-dot--ok { background: var(--success); }
+.quiz-dot--no { background: var(--warn); }
+.quiz-dot--current { border-color: var(--ink); transform: scale(1.25); }
+
+/* ============================================================
+   כרטיס השאלה
+   ============================================================ */
+.quiz-card { text-align: center; }
+
+.quiz-question {
+  font-size: var(--fs-lg);
+  margin-block-end: 0;
+}
+
+/* ============================================================
+   כפתורי תשובה
+   ============================================================ */
+.answer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+
+.answer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  min-block-size: 64px;
+  padding: var(--sp-4) var(--sp-3);
+  background: var(--surface);
+  border: 3px solid var(--line-strong);
+  border-radius: var(--r-md);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--text);
+  box-shadow: var(--sh-1);
+  transition: transform var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease),
+              background var(--dur-1) var(--ease);
+}
+
+.answer-btn:hover:not([disabled]) {
+  border-color: var(--unit-1);
+  background: var(--unit-1-wash);
+}
+
+.answer-btn:active:not([disabled]) { transform: translateY(2px); }
+
+.answer-btn[disabled] { cursor: default; opacity: 1; }
+
+.answer-btn__mark {
+  font-size: 1.4em;
+  line-height: 1;
+  min-inline-size: 1em;
+}
+
+/* מצבים אחרי מענה — סמל + טקסט + מסגרת, לא צבע בלבד */
+.answer-btn--correct {
+  border-color: var(--success);
+  background: var(--success-wash);
+  color: var(--success);
+}
+
+.answer-btn--wrong {
+  border-color: var(--warn);
+  background: var(--warn-wash);
+  color: var(--warn);
+}
+
+/* התשובה הנכונה, כשנבחרה תשובה שגויה */
+.answer-btn--is-answer {
+  border-color: var(--success);
+  border-style: dashed;
+  color: var(--success);
+}
+
+/* ============================================================
+   משוב
+   ============================================================ */
+.feedback-slot:empty { display: none; }
+
+.feedback {
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  border-inline-start: 6px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: var(--sh-1);
+}
+
+.feedback--ok { border-inline-start-color: var(--success); background: var(--success-wash); }
+.feedback--no { border-inline-start-color: var(--warn);    background: var(--warn-wash); }
+
+.feedback__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-3);
+}
+
+.feedback__icon { font-size: 1.5rem; line-height: 1; }
+.feedback--ok .feedback__icon { color: var(--success); }
+.feedback--no .feedback__icon { color: var(--warn); }
+
+.feedback__title { margin-block-end: 0; font-size: var(--fs-md); }
+
+.feedback__why  { margin-block-end: var(--sp-3); line-height: 1.7; }
+
+.feedback__note {
+  margin-block-end: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   תזכורת מתקפלת
+   ============================================================ */
+.reminder {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-alt);
+  font-size: var(--fs-sm);
+}
+
+.reminder summary {
+  cursor: pointer;
+  font-weight: 700;
+  min-block-size: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.reminder p { margin-block: var(--sp-2) 0; color: var(--text-muted); }
+
+/* ============================================================
+   מסך סיכום
+   ============================================================ */
+.result-card { text-align: center; }
+
+.result-score {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  color: var(--unit-1-deep);
+  line-height: 1.2;
+  margin-block-end: var(--sp-2);
+}
+
+.result-message {
+  font-size: var(--fs-md);
+  margin-block-end: 0;
+}
+
+.result-best {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.concept-list { list-style: none; padding-inline-start: 0; margin-block-end: 0; }
+
+.concept-list li {
+  display: flex;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  border-block-end: 1px solid var(--line);
+  line-height: 1.6;
+}
+
+.concept-list li:last-child { border-block-end: none; }
+
+.concept-list__tick { flex: none; color: var(--success); font-weight: 700; }
+.concept-list--review .concept-list__tick { color: var(--warn); }
+
+/* ============================================================
+   כפתורים גדולים ושורות ממורכזות
+   ============================================================ */
+.btn--lg {
+  min-block-size: 52px;
+  padding-inline: var(--sp-6);
+  font-size: var(--fs-base);
+}
+
+.btn-row--center { justify-content: center; }
+
+/* ============================================================
+   מסכים צרים
+   ============================================================ */
+@media (max-width: 639px) {
+  .answer-grid { grid-template-columns: 1fr; gap: var(--sp-3); }
+  .answer-btn { min-block-size: 60px; font-size: var(--fs-md); }
+  .solid-svg { max-inline-size: 210px; }
+  .solid-svg--wide { max-inline-size: 100%; }
+  .result-score { font-size: var(--fs-2xl); }
+  .feedback { padding: var(--sp-4); }
+  .btn-row--center .btn { flex: 1 1 100%; }
+}
+
+/* ============================================================
+   פעילות 1.1 — איור חלקי הפירמידה
+   ============================================================ */
+.parts-svg {
+  display: block;
+  margin-inline: auto;
+  inline-size: 100%;
+  max-inline-size: 340px;
+  block-size: auto;
+  touch-action: manipulation;
+}
+
+.diagram-stage {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-3);
+  box-shadow: var(--sh-1);
+}
+
+.pp-face   { fill: var(--unit-1); fill-opacity: .16; }
+.pp-base   { fill: var(--gold);   fill-opacity: .30; }
+
+.pp-edge {
+  stroke: var(--text);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.pp-edge--hidden { stroke-dasharray: 5 4; stroke-opacity: .42; }
+
+.pp-vertex { fill: var(--ink); }
+.pp-apex   { fill: var(--warn); }
+
+/* סימון חלק — שינוי צבע וגם עובי/גודל, לא צבע בלבד */
+.pp-hl { transition: none; }
+polygon.pp-hl  { fill: var(--warn); fill-opacity: .55; stroke: var(--warn); stroke-width: 2.5; }
+line.pp-hl     { stroke: var(--warn); stroke-width: 6.5; stroke-opacity: 1; stroke-dasharray: none; }
+circle.pp-hl   { fill: var(--warn); r: 9; stroke: var(--surface); stroke-width: 2.5; }
+
+/* ------------------------------------------------------------
+   אזורי הלחיצה — כפתורי HTML אמיתיים מעל האיור.
+   שקופים, אך מקבלים מיקוד מקלדת וסימון מיקוד בכל דפדפן,
+   ומבטיחים מטרת מגע של 44 פיקסלים לפחות.
+   ------------------------------------------------------------ */
+.diagram-wrap { position: relative; inline-size: 100%; }
+
+.pp-hits {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pp-hit {
+  position: absolute;
+  inline-size: 44px;
+  block-size: 44px;
+  transform: translate(-50%, -50%);   /* מרכוז סביב הנקודה */
+  padding: 0;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+}
+
+.pp-hit:hover {
+  background: rgba(31, 138, 140, .22);
+  border-color: var(--unit-1);
+}
+
+.pp-hit:focus-visible,
+.pp-hit:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(224, 163, 46, .30);
+  box-shadow: 0 0 0 3px rgba(224, 163, 46, .35);
+}
+
+/* ============================================================
+   בורר זווית המבט
+   ============================================================ */
+.view-switch {
+  display: flex;
+  gap: var(--sp-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.view-btn {
+  min-block-size: 44px;
+  padding: var(--sp-2) var(--sp-4);
+  border: 2px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+  font-size: var(--fs-sm);
+}
+
+.view-btn:hover { border-color: var(--unit-1); }
+
+.view-btn--active {
+  background: var(--unit-1);
+  border-color: var(--unit-1);
+  color: #fff;
+  font-weight: 700;
+}
+
+.view-hint {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  margin-block-end: 0;
+}
+
+/* ============================================================
+   כרטיס החלק שנבחר / הסבר מודרך
+   ============================================================ */
+.part-readout__empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  margin-block-end: 0;
+}
+
+.part-readout__card {
+  background: var(--unit-1-wash);
+  border-inline-start: 6px solid var(--unit-1);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+}
+
+.part-readout__name { margin-block-end: var(--sp-2); color: var(--unit-1-deep); }
+.part-readout__card p { margin-block-end: 0; }
+
+.tour-card__text { margin-block-end: 0; line-height: 1.75; }
+
+.quiz-sub {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-block: var(--sp-2) 0;
+}
+
+/* ============================================================
+   כפתורי התאמה
+   ============================================================ */
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-3);
+}
+
+.answer-btn--sm {
+  min-block-size: 56px;
+  font-size: var(--fs-base);
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+@media (max-width: 639px) {
+  .parts-svg { max-inline-size: 100%; }
+  .option-grid { grid-template-columns: 1fr; }
+  .view-btn { flex: 1 1 auto; padding-inline: var(--sp-3); }
+}
