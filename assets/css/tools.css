@@ -1,0 +1,221 @@
+/* ============================================================
+   tools.css — ארגז הכלים, מבחן הסיום והתעודה
+   ============================================================ */
+
+/* ============================================================
+   לשוניות
+   ============================================================ */
+.tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-block: var(--sp-4);
+  border-block-end: 2px solid var(--line);
+  padding-block-end: var(--sp-2);
+}
+
+.tab-btn {
+  min-block-size: 44px;
+  padding: var(--sp-2) var(--sp-4);
+  border: 2px solid transparent;
+  border-radius: var(--r-pill);
+  background: var(--surface-alt);
+  color: var(--text);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
+.tab-btn:hover { background: var(--gold-wash); }
+
+.tab-btn--active {
+  background: var(--ink);
+  color: var(--text-invert);
+  border-color: var(--ink);
+  font-weight: 700;
+}
+
+/* ============================================================
+   מתגי תצוגה
+   ============================================================ */
+.toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  justify-content: center;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 44px;
+  padding: var(--sp-2) var(--sp-4);
+  border: 2px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toggle:hover { border-color: var(--unit-1); }
+.toggle input { inline-size: 20px; block-size: 20px; accent-color: var(--unit-1); }
+.toggle:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(224, 163, 46, .3); }
+
+/* ============================================================
+   מארח המודל התלת־ממדי
+   ============================================================ */
+.three-host {
+  inline-size: 100%;
+  max-inline-size: 420px;
+  margin-inline: auto;
+  block-size: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: none;
+}
+
+.three-host canvas { border-radius: var(--r-sm); max-inline-size: 100%; }
+
+/* ============================================================
+   כרטיס הנוסחה
+   ============================================================ */
+.formula-card { text-align: center; }
+
+.formula-line {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--unit-2-deep);
+  padding: var(--sp-4);
+  background: var(--unit-2-wash);
+  border-radius: var(--r-md);
+  margin-block: var(--sp-3);
+}
+
+.formula-secondary {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-block-end: 0;
+}
+
+/* ============================================================
+   מילון
+   ============================================================ */
+.glossary { margin: 0; }
+.glossary dt {
+  font-weight: 700;
+  color: var(--unit-1-deep);
+  margin-block-start: var(--sp-3);
+}
+.glossary dd {
+  margin-inline-start: 0;
+  padding-inline-start: var(--sp-4);
+  border-inline-start: 3px solid var(--line);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   מבחן הסיום
+   ============================================================ */
+.answer-btn--chosen {
+  border-color: var(--gold);
+  background: var(--gold-wash);
+}
+
+.answer-btn--chosen .answer-btn__mark::before { content: "\25CF"; }
+
+.review-item { border-inline-start: 6px solid var(--line-strong); }
+.review-item--ok { border-inline-start-color: var(--success); }
+.review-item--no { border-inline-start-color: var(--warn); }
+.review-answer { margin-block-end: var(--sp-2); font-size: var(--fs-sm); }
+
+/* ============================================================
+   תעודת הסיום
+   ============================================================ */
+.certificate {
+  border: 6px double var(--gold);
+  border-radius: var(--r-lg);
+  padding: var(--sp-7) var(--sp-5);
+  background: var(--surface);
+  text-align: center;
+  box-shadow: var(--sh-2);
+}
+
+.cert__badge { font-size: 3rem; line-height: 1; margin-block-end: var(--sp-2); }
+
+.cert__eyebrow {
+  letter-spacing: .14em;
+  font-size: var(--fs-xs);
+  color: var(--gold-deep);
+  font-weight: 700;
+  margin-block-end: var(--sp-1);
+}
+
+.cert__title {
+  font-size: var(--fs-2xl);
+  margin-block-end: var(--sp-4);
+}
+
+.cert__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--unit-1-deep);
+  padding-block: var(--sp-3);
+  border-block: 2px solid var(--line);
+  margin-block-end: var(--sp-4);
+}
+
+.cert__body { max-inline-size: 46ch; margin-inline: auto; }
+.cert__meta { font-size: var(--fs-sm); color: var(--text-muted); margin-block-end: var(--sp-2); }
+.cert__score { font-size: var(--fs-sm); color: var(--text-muted); margin-block-end: 0; }
+
+.cert__input {
+  inline-size: 100%;
+  max-inline-size: 320px;
+  min-block-size: 52px;
+  padding-inline: var(--sp-4);
+  border: 3px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font: inherit;
+  margin-block: var(--sp-2);
+}
+
+.cert__input:focus-visible { border-color: var(--gold); outline: none; }
+
+/* ============================================================
+   תג ההישג בדף ההתקדמות
+   ============================================================ */
+.badge-panel {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  border: 2px solid var(--gold);
+  background: var(--gold-wash);
+  flex-wrap: wrap;
+}
+
+.badge-panel__icon { font-size: 2.6rem; line-height: 1; }
+.badge-panel h3 { margin-block-end: var(--sp-1); }
+.badge-panel p { margin-block-end: var(--sp-3); }
+
+/* ============================================================
+   הדפסה
+   ============================================================ */
+@media print {
+  .certificate { box-shadow: none; page-break-inside: avoid; }
+  .tab-bar, .toggle-row, .explore-controls { display: none !important; }
+}
+
+/* ============================================================
+   מסכים צרים
+   ============================================================ */
+@media (max-width: 639px) {
+  .tab-btn { flex: 1 1 auto; text-align: center; }
+  .three-host { block-size: 260px; }
+  .certificate { padding: var(--sp-5) var(--sp-4); }
+  .cert__title { font-size: var(--fs-xl); }
+  .cert__name { font-size: var(--fs-lg); }
+  .formula-line { font-size: var(--fs-lg); }
+}

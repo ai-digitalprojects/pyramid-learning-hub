@@ -1,5 +1,8 @@
 /* ============================================================
    views/progress.js — ההתקדמות שלי
+   ------------------------------------------------------------
+   מציג התקדמות בשתי היחידות ובמבחן הסיום.
+   הנתונים נקראים מהאחסון המקומי בלבד; שום דבר אינו נשלח החוצה.
    ============================================================ */
 (function (global) {
   'use strict';
@@ -15,6 +18,8 @@
     var allActs = units[0].activities.concat(units[1].activities);
     var totalDone = Store.countDone(allActs);
     var overall = Math.round((totalDone / allActs.length) * 100);
+    var data = Store.all();
+    var EX = D.finalExam;
 
     /* ---------- טבעות ---------- */
     var rings = el('div', { class: 'stat-grid' }, [
@@ -36,6 +41,55 @@
       ])
     ]);
 
+    /* ---------- מבחן הסיום ---------- */
+    var finalPanel;
+    if (data.final.attempts === 0) {
+      finalPanel = el('div', { class: 'panel' }, [
+        el('h3', { text: EX.title }),
+        el('p', { class: 'card__desc', text: 'עוד לא ניגשתם למבחן הסיום.' }),
+        el('a', { class: 'btn btn--gold', href: '#/final' }, [document.createTextNode('למבחן הסיום')])
+      ]);
+    } else {
+      var b = data.final.best;
+      finalPanel = el('div', { class: 'panel' }, [
+        el('h3', { text: EX.title }),
+        el('p', {}, [
+          document.createTextNode('התוצאה הטובה ביותר: '),
+          UI.num(b.score + ' מתוך ' + b.max),
+          document.createTextNode('  ·  ניסיונות: '),
+          UI.num(data.final.attempts)
+        ]),
+        el('p', {}, [
+          data.final.passed
+            ? el('span', { class: 'chip chip--done' }, [
+                el('span', { 'aria-hidden': 'true', text: '✔' }),
+                el('span', { text: 'עברתם' })
+              ])
+            : el('span', { class: 'chip chip--todo' }, [
+                el('span', { 'aria-hidden': 'true', text: '○' }),
+                el('span', { text: 'עוד לא עברתם' })
+              ])
+        ]),
+        el('div', { class: 'btn-row' }, [
+          el('a', { class: 'btn btn--gold', href: '#/final' },
+            [document.createTextNode(data.final.passed ? 'לתעודה ולמבחן חוזר' : 'למבחן חוזר')])
+        ])
+      ]);
+    }
+
+    /* ---------- תג ההישג ---------- */
+    var badgePanel = data.badge.earned
+      ? el('div', { class: 'panel badge-panel' }, [
+          el('div', { class: 'badge-panel__icon', 'aria-hidden': 'true', text: '🏅' }),
+          el('div', {}, [
+            el('h3', { text: 'תעודת סיום' }),
+            el('p', { text: 'סיימתם את המסע אל הפירמידה. אפשר לפתוח ולהדפיס את התעודה.' }),
+            el('a', { class: 'btn btn--gold', href: '#/final' },
+              [document.createTextNode('לתעודה')])
+          ])
+        ])
+      : null;
+
     /* ---------- טבלה מפורטת ---------- */
     var rows = [];
     units.forEach(function (u) {
@@ -49,11 +103,14 @@
             ])
           ]),
           el('td', { text: u.short }),
-          el('td', {}, [ UI.stateChip(rec.state) ]),
+          el('td', {}, [UI.stateChip(rec.state)]),
           el('td', {}, [
             (rec.state === 'done' && act.scored && rec.max)
-              ? el('span', {}, [ UI.num(rec.score + ' / ' + rec.max) ])
+              ? el('span', {}, [UI.num(rec.score + ' / ' + rec.max)])
               : el('span', { class: 'num', text: S.progress.noScore })
+          ]),
+          el('td', {}, [
+            rec.attempts ? UI.num(String(rec.attempts)) : el('span', { class: 'num', text: '—' })
           ])
         ]));
       });
@@ -66,14 +123,14 @@
             el('th', { scope: 'col', text: S.progress.tableHeadAct }),
             el('th', { scope: 'col', text: S.progress.tableHeadUnit }),
             el('th', { scope: 'col', text: S.progress.tableHeadState }),
-            el('th', { scope: 'col', text: S.progress.tableHeadScore })
+            el('th', { scope: 'col', text: S.progress.tableHeadScore }),
+            el('th', { scope: 'col', text: 'ניסיונות' })
           ])
         ]),
         el('tbody', {}, rows)
       ])
     ]);
 
-    /* ---------- הערות ופעולות ---------- */
     var deviceNote = el('div', { class: 'notice' }, [
       el('span', { class: 'notice__icon', 'aria-hidden': 'true', text: 'ℹ️' }),
       el('p', { text: S.progress.deviceNote })
@@ -87,10 +144,8 @@
       : null;
 
     var actions = el('div', { class: 'btn-row no-print', style: 'margin-block-start:var(--sp-5)' }, [
-      el('button', {
-        type: 'button', class: 'btn btn--ghost',
-        onclick: function () { global.print(); }
-      }, [ document.createTextNode(S.actions.print) ]),
+      el('button', { type: 'button', class: 'btn btn--ghost',
+        onclick: function () { global.print(); } }, [document.createTextNode(S.actions.print)]),
       el('button', {
         type: 'button', class: 'btn btn--danger',
         onclick: function () {
@@ -100,7 +155,7 @@
             App.views.progress(mount);
           }
         }
-      }, [ document.createTextNode(S.actions.reset) ])
+      }, [document.createTextNode(S.actions.reset)])
     ]);
 
     UI.clear(mount);
@@ -115,9 +170,12 @@
       el('p', { class: 'card__desc', text: S.progress.lead }),
       storageWarn,
       rings,
-      el('div', { class: 'section-head' }, [ el('h2', { text: 'פירוט לפי פעילות' }) ]),
+      badgePanel,
+      el('div', { class: 'section-head' }, [el('h2', { text: 'מבחן הסיום' })]),
+      finalPanel,
+      el('div', { class: 'section-head' }, [el('h2', { text: 'פירוט לפי פעילות' })]),
       table,
-      el('div', { style: 'margin-block-start:var(--sp-5)' }, [ deviceNote ]),
+      el('div', { style: 'margin-block-start:var(--sp-5)' }, [deviceNote]),
       actions
     ]));
 
