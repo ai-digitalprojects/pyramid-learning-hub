@@ -1,0 +1,380 @@
+/* ============================================================
+   kit.css — רכיבי מנוע הפעילויות המשותף
+   ============================================================ */
+
+/* ============================================================
+   מציג הגופים המשותף (solid-view / net-view)
+   ============================================================ */
+.solid-view, .net-svg {
+  display: block;
+  margin-inline: auto;
+  inline-size: 100%;
+  max-inline-size: 320px;
+  block-size: auto;
+  touch-action: manipulation;
+}
+
+.pp-height {
+  stroke: var(--warn);
+  stroke-width: 2.6;
+  stroke-dasharray: 6 4;
+}
+
+.right-angle { fill: none; stroke: var(--warn); stroke-width: 1.8; }
+.pp-foot { fill: var(--warn); }
+
+.pp-slant {
+  stroke: var(--info);
+  stroke-width: 2.4;
+  stroke-dasharray: 4 3;
+}
+
+.pp-fold-line { stroke-dasharray: 5 4; stroke-opacity: .55; }
+
+/* ============================================================
+   התקדמות בתוך פעילות
+   ============================================================ */
+.quiz-progress { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+/* ============================================================
+   קלט מספרי
+   ============================================================ */
+.numeric-row {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.numeric-field {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--surface);
+  border: 3px solid var(--line-strong);
+  border-radius: var(--r-md);
+  padding-inline: var(--sp-3);
+}
+
+.num-input {
+  inline-size: 7rem;
+  min-block-size: 52px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  text-align: center;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.num-input:focus { outline: none; }
+.numeric-field:focus-within { border-color: var(--unit-2); }
+.numeric-unit { font-size: var(--fs-sm); color: var(--text-muted); white-space: nowrap; }
+
+/* ============================================================
+   התאמה (הקשה ואז הקשה)
+   ============================================================ */
+.match-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+
+.match-col { display: flex; flex-direction: column; gap: var(--sp-3); }
+
+.match-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 56px;
+  padding: var(--sp-3);
+  background: var(--surface);
+  border: 3px solid var(--line-strong);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.match-card .solid-view, .match-card .net-svg { max-inline-size: 130px; }
+.match-card__text { font-size: var(--fs-sm); }
+.match-card:hover:not([disabled]) { border-color: var(--unit-1); }
+.match-card--sel { border-color: var(--gold); background: var(--gold-wash); }
+
+.match-card--done {
+  border-color: var(--success);
+  background: var(--success-wash);
+  opacity: .9;
+  cursor: default;
+}
+
+.match-card--done::after {
+  content: "\2714";
+  color: var(--success);
+  font-weight: 700;
+}
+
+/* ============================================================
+   מיון לתאים
+   ============================================================ */
+.sort-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  justify-content: center;
+  margin-block-end: var(--sp-4);
+}
+
+.sort-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  min-block-size: 44px;
+  padding: var(--sp-2);
+  background: var(--surface);
+  border: 3px solid var(--line-strong);
+  border-radius: var(--r-md);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.sort-item .solid-svg, .sort-item .solid-view { max-inline-size: 92px; }
+.sort-item__text { font-size: var(--fs-xs); font-weight: 600; }
+.sort-item--sel { border-color: var(--gold); background: var(--gold-wash); }
+.sort-item--done { opacity: .4; cursor: default; }
+
+.sort-bins { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+
+.sort-bin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  min-block-size: 64px;
+  padding: var(--sp-3) var(--sp-4);
+  border: 3px dashed var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-alt);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.sort-bin:hover { border-color: var(--unit-1); background: var(--unit-1-wash); }
+
+.sort-bin__count {
+  min-inline-size: 28px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--text-invert);
+  font-size: var(--fs-sm);
+  direction: ltr;
+}
+
+/* ============================================================
+   בניית נוסחה
+   ============================================================ */
+.build-slots, .build-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  justify-content: center;
+  align-items: center;
+}
+
+.build-slots { margin-block-end: var(--sp-4); }
+
+.build-slot {
+  min-inline-size: 76px;
+  min-block-size: 52px;
+  padding-inline: var(--sp-3);
+  border: 3px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface-alt);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-base);
+  color: var(--text-muted);
+}
+
+.build-slot--filled {
+  border-style: solid;
+  border-color: var(--unit-2);
+  background: var(--unit-2-wash);
+  color: var(--text);
+}
+
+.build-tile {
+  min-block-size: 48px;
+  padding: var(--sp-2) var(--sp-4);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.build-tile:hover { background: var(--gold-wash); border-color: var(--gold-deep); }
+
+/* ============================================================
+   סרגל ניווט תחתון בפעילות
+   ============================================================ */
+.activity-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-6);
+  padding-block-start: var(--sp-4);
+  border-block-start: 2px solid var(--line);
+}
+
+.activity-nav__btn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 56px;
+  padding: var(--sp-2) var(--sp-3);
+  border: 2px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+}
+
+.activity-nav__btn:hover { border-color: var(--gold); background: var(--gold-wash); }
+.activity-nav__btn--mid { justify-content: center; }
+.activity-nav__text { display: flex; flex-direction: column; min-inline-size: 0; }
+.activity-nav__label { font-weight: 700; }
+
+.activity-nav__title {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   מסך הסיכום — כפתורי ההמשך
+   ============================================================ */
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  align-items: center;
+}
+
+.btn--wide { inline-size: 100%; max-inline-size: 520px; }
+.btn__stack { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25; }
+.btn__label { font-weight: 700; }
+.btn__sub { font-size: var(--fs-xs); opacity: .88; font-weight: 500; }
+
+/* ============================================================
+   וידאו רספונסיבי
+   ============================================================ */
+.video-frame {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--ink);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+}
+
+.video-fallback {
+  padding: var(--sp-5);
+  color: var(--text-invert);
+  text-align: center;
+  font-size: var(--fs-sm);
+}
+
+/* ============================================================
+   בקרות חקירה (מחוונים)
+   ============================================================ */
+.explore-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  justify-content: center;
+  align-items: center;
+  padding: var(--sp-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.control-group { display: flex; flex-direction: column; gap: var(--sp-2); min-inline-size: 200px; }
+.control-group__label { font-size: var(--fs-sm); font-weight: 700; }
+
+.control-group input[type="range"] {
+  inline-size: 100%;
+  min-block-size: 44px;
+  accent-color: var(--unit-1);
+}
+
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  justify-content: center;
+  margin-block-start: var(--sp-3);
+}
+
+.readout__item {
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+}
+
+.readout__value {
+  font-weight: 700;
+  color: var(--unit-1-deep);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* השוואה זו לצד זו */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  align-items: end;
+}
+
+.compare-cell { text-align: center; }
+.compare-cell h3 { margin-block-end: var(--sp-2); }
+
+/* ============================================================
+   מסכים צרים
+   ============================================================ */
+@media (max-width: 639px) {
+  .match-cols { grid-template-columns: 1fr; }
+  .sort-bins { grid-template-columns: 1fr; }
+  .activity-nav { grid-template-columns: 1fr; }
+  .activity-nav__title { white-space: normal; }
+  .numeric-row { flex-direction: column; align-items: stretch; }
+  .numeric-field { justify-content: center; }
+  .num-input { inline-size: 100%; }
+  .solid-view, .net-svg { max-inline-size: 100%; }
+  .compare-grid { grid-template-columns: 1fr; }
+}
