@@ -28,6 +28,7 @@
 .brand {
   display: flex;
   align-items: center;
+  min-block-size: 44px;
   gap: var(--sp-3);
   text-decoration: none;
   color: inherit;
@@ -437,7 +438,7 @@ table.data {
 
 table.data th,
 table.data td {
-  padding: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4);
   text-align: start;
   border-block-end: 1px solid var(--line);
 }

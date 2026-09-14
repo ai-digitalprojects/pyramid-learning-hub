@@ -407,3 +407,12 @@
 @media (prefers-reduced-motion: reduce) {
   .pour-jar__fill { transition: none; }
 }
+
+/* מחוונים — מטרת מגע של 44 פיקסלים */
+.control-group input[type="range"],
+.explore-controls input[type="range"] {
+  inline-size: 100%;
+  block-size: 44px;
+  accent-color: var(--unit-1);
+  cursor: pointer;
+}
