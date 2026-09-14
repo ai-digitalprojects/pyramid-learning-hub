@@ -126,6 +126,7 @@
     var S = opts.size || 232;
     var show = opts.show || {};
     var d = describe(g);
+    var segs = {};   // קטעי מדידה הניתנים לבחירה (גובה הפירמידה, גובה הפאה)
 
     var centre = avg(d.verts.map(function (v) { return v.p; }));
 
@@ -213,11 +214,14 @@
       var apexP = g.kind === 'pyramid' ? g.apex : [0, g.height, 0];
       var fa = proj(foot), ap = proj(apexP);
       var gh = make('g', { class: 'height-mark' });
-      gh.appendChild(make('line', {
+      var hLine = make('line', {
         x1: ap[0].toFixed(2), y1: ap[1].toFixed(2),
         x2: fa[0].toFixed(2), y2: fa[1].toFixed(2),
         class: 'pp-height'
-      }));
+      });
+      hLine.setAttribute('data-vis-part', 'height');
+      gh.appendChild(hLine);
+      segs.height = { a: apexP, b: foot };
       // סימן זווית ישרה בבסיס הגובה
       var toB = proj(g.baseVertices[0]);
       var ux = (toB[0] - fa[0]), uy = (toB[1] - fa[1]);
@@ -241,11 +245,14 @@
       var a1 = g.baseVertices[si], b1 = g.baseVertices[(si + 1) % g.n];
       var mid = [(a1[0] + b1[0]) / 2, 0, (a1[2] + b1[2]) / 2];
       var p1 = proj(g.apex), p2 = proj(mid);
-      svg.appendChild(make('line', {
+      var sLine = make('line', {
         x1: p1[0].toFixed(2), y1: p1[1].toFixed(2),
         x2: p2[0].toFixed(2), y2: p2[1].toFixed(2),
         class: 'pp-slant'
-      }));
+      });
+      sLine.setAttribute('data-vis-part', 'slant');
+      svg.appendChild(sLine);
+      segs.slant = { a: g.apex, b: mid };
     }
 
     /* --- קודקודים --- */
@@ -325,7 +332,8 @@
     var partNames = {
       'base': 'הבסיס', 'top': 'הבסיס העליון', 'face': 'פאה צדדית',
       'base-edge': 'צלע בסיס', 'top-edge': 'צלע עליונה', 'lateral-edge': 'צלע צדדית',
-      'base-vertex': 'קודקוד בסיס', 'top-vertex': 'קודקוד עליון', 'apex': 'קודקוד הראש'
+      'base-vertex': 'קודקוד בסיס', 'top-vertex': 'קודקוד עליון', 'apex': 'קודקוד הראש',
+      'height': 'גובה הפירמידה', 'slant': 'גובה הפאה הצדדית'
     };
 
     var want = opts.pickable || ['base', 'face', 'base-edge', 'lateral-edge', 'base-vertex', 'apex'];
@@ -353,6 +361,15 @@
       hit(make('line', {
         x1: a[0].toFixed(2), y1: a[1].toFixed(2), x2: b[0].toFixed(2), y2: b[1].toFixed(2)
       }), e.part, e.index, partNames[e.part] + ' מספר ' + (e.index + 1));
+    });
+
+    // קטעי מדידה — גובה הפירמידה וגובה הפאה הצדדית
+    Object.keys(segs).forEach(function (key) {
+      if (!wants(key)) return;
+      var a = proj(segs[key].a), b = proj(segs[key].b);
+      hit(make('line', {
+        x1: a[0].toFixed(2), y1: a[1].toFixed(2), x2: b[0].toFixed(2), y2: b[1].toFixed(2)
+      }), key, null, partNames[key]);
     });
 
     d.verts.forEach(function (v) {

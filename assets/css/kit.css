@@ -378,3 +378,32 @@
   .solid-view, .net-svg { max-inline-size: 100%; }
   .compare-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   צנצנת השפיכה (פעילות 2.4)
+   ============================================================ */
+.pour-jar {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 150px;
+  block-size: 190px;
+  margin-inline: auto;
+  border: 3px solid var(--ink);
+  border-block-start: none;
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+  background: var(--surface);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.pour-jar__fill {
+  inline-size: 100%;
+  block-size: 0;
+  background: var(--gold);
+  transition: block-size var(--dur-3) var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pour-jar__fill { transition: none; }
+}
