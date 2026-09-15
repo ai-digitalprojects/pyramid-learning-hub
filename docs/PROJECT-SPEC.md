@@ -6,7 +6,10 @@
 **Language:** Hebrew only, full RTL
 **Audience:** Grade 6 (ages 11–12)
 **Delivery:** Static site, published via GitHub Pages
-**Status:** D1–D12 approved. Phase 0 and Phase 1 complete; Phase 2 not started.
+**Status:** D1–D12 approved. Phases 0–7 complete — both units, the toolbox, the progress
+dashboard, the final assessment and the certificate are built and tested, and the content
+review is recorded in [CONTENT-REVIEW.md](CONTENT-REVIEW.md). Phase 8 (publish) awaits
+approval and the author-email change.
 
 ---
 
