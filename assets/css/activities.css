@@ -487,6 +487,18 @@ circle.pp-hl {
   gap: var(--sp-3);
 }
 
+/* אפשרויות מנוסחות במילים — שורה אחת לכל אפשרות, כדי שהמשפט יישאר קריא */
+.option-grid--wide {
+  grid-template-columns: 1fr;
+}
+
+.option-grid--wide .answer-btn {
+  justify-content: flex-start;
+  text-align: start;
+  min-block-size: 56px;
+  font-size: var(--fs-base);
+}
+
 .answer-btn--sm {
   min-block-size: 56px;
   font-size: var(--fs-base);
