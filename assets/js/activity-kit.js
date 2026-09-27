@@ -109,6 +109,7 @@
         size: spec.size || 232,
         show: spec.show || {},
         labels: spec.labels,
+        measures: spec.measures,
         interactive: !!handlers.onPick,
         pickable: spec.pickable,
         onPick: handlers.onPick,

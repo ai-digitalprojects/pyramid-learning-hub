@@ -41,6 +41,19 @@
   font-weight: 500;
 }
 
+/* מספר מידה שיושב על קטע באיור. ההילה הבהירה שומרת שהוא יישאר קריא
+   גם כשהוא חוצה קו של הגוף. */
+.sv-measure {
+  fill: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  paint-order: stroke fill;
+  stroke: var(--surface);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
 .sv-leader {
   fill: none;
   stroke: var(--text-muted);
@@ -522,4 +535,40 @@ circle.pp-hl {
   text-align: center;
   font-weight: 700;
   color: var(--warn);
+}
+
+/* ---------- איור מורכב: כמה גופים בשאלה אחת ----------
+   בעיה שמדברת על שני גופים צריכה לראות את שניהם. הם נפרשים זה לצד
+   זה כשיש מקום, ואחד מתחת לשני במסך צר. */
+.combo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  margin-block: var(--sp-3);
+}
+
+.combo__lead {
+  flex-basis: 100%;
+  margin: 0;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.combo__part {
+  margin: 0;
+  flex: 0 1 210px;
+  text-align: center;
+}
+
+.combo__title {
+  font-weight: 700;
+  margin-block-end: var(--sp-1);
+}
+
+.combo__note {
+  margin-block: var(--sp-1) 0;
+  font-weight: 700;
+  color: var(--text-muted);
 }

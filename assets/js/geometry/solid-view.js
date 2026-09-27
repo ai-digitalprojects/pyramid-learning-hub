@@ -138,6 +138,11 @@
       if (-p[1] < minY) minY = -p[1]; if (-p[1] > maxY) maxY = -p[1];
     });
     var span = Math.max(maxX - minX, maxY - minY) || 1;
+    /* כששני גופים מוצגים זה לצד זה ונאמר עליהם שהם באותו בסיס ובאותו
+       גובה, הם חייבים להיות מצוירים באותו קנה מידה. הקורא מעביר כאן
+       את המוטה הגדול מבין השניים. */
+    var naturalSpan = span;
+    if (typeof opts.span === 'number' && opts.span > 0) span = opts.span;
     var margin = opts.margin === undefined ? 26 : opts.margin;
     var scale = (S - margin * 2) / span;
     var cx = S / 2 - ((minX + maxX) / 2) * scale;
@@ -170,6 +175,7 @@
       class: 'solid-view' + (opts.className ? ' ' + opts.className : ''),
       role: opts.interactive ? 'group' : 'img'
     });
+    svg.setAttribute('data-span', naturalSpan.toFixed(4));
     if (!opts.interactive) {
       svg.setAttribute('aria-label', opts.ariaLabel || defaultAria(g, view));
     }
@@ -242,6 +248,15 @@
     /* --- גובה הפאה הצדדית (אפותם הפאה) --- */
     if (show.slant !== undefined && show.slant !== false && g.kind === 'pyramid') {
       var si = show.slant | 0;
+      /* 'auto': הפאה שפונה אל הצופה, כך שגובה הפאה נראה במלואו */
+      if (show.slant === 'auto') {
+        var bestY = -Infinity;
+        for (var qi = 0; qi < g.n; qi++) {
+          var qa = g.baseVertices[qi], qb = g.baseVertices[(qi + 1) % g.n];
+          var qm = proj([(qa[0] + qb[0]) / 2, 0, (qa[2] + qb[2]) / 2]);
+          if (qm[1] > bestY) { bestY = qm[1]; si = qi; }
+        }
+      }
       var a1 = g.baseVertices[si], b1 = g.baseVertices[(si + 1) % g.n];
       var mid = [(a1[0] + b1[0]) / 2, 0, (a1[2] + b1[2]) / 2];
       var p1 = proj(g.apex), p2 = proj(mid);
@@ -273,6 +288,118 @@
     }
 
     if (opts.highlight) highlight(svg, opts.highlight.part, opts.highlight.index);
+
+    /* ------------------------------------------------------------
+       תוויות מידה על הקטעים
+       ------------------------------------------------------------
+       הפעילות מציינת רק את הערך, למשל { height: '6 ס״מ' }, והמיקום
+       מחושב מהגאומטריה עצמה. כך המספר שהתלמיד רואה באיור יושב תמיד
+       על הקטע הנכון, גם אם הבסיס או זווית המבט משתנים.
+       ------------------------------------------------------------ */
+    if (opts.measures) {
+      var gm = make('g', { class: 'sv-measures' });
+      var mid3 = function (a, b) {
+        return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
+      };
+      var apexPt = g.kind === 'pyramid' ? g.apex : [0, g.height, 0];
+
+      /* הצלע הצדדית מסומנת בצד הנגדי לגובה הפאה, כדי ששלושת הקטעים
+         ייצאו מקודקוד הראש לשלושה כיוונים שונים ויישארו קריאים. */
+      function lateralOn(sideSign) {
+        var best = null, bestX = null;
+        g.baseVertices.forEach(function (bv) {
+          var x = proj(bv)[0];
+          if (bestX === null || (sideSign > 0 ? x > bestX : x < bestX)) { bestX = x; best = bv; }
+        });
+        return { a: apexPt, b: best };
+      }
+
+      /* צלע הבסיס הקרובה אל הצופה, זו שהתלמיד רואה במלואה */
+      function frontBaseEdge() {
+        var best = null, bestY = -Infinity;
+        for (var bi = 0; bi < g.n; bi++) {
+          var ba = g.baseVertices[bi], bb = g.baseVertices[(bi + 1) % g.n];
+          var bm = proj(mid3(ba, bb));
+          if (bm[1] > bestY) { bestY = bm[1]; best = { a: ba, b: bb }; }
+        }
+        return best;
+      }
+
+      var pool = {
+        height: segs.height,
+        slant: segs.slant,
+        lateralEdge: lateralOn(-1),
+        baseEdge: frontBaseEdge(),
+        baseArea: frontBaseEdge()
+      };
+      /* אם גובה הפאה מסומן משמאל, הצלע הצדדית עוברת לימין */
+      if (segs.slant && proj(mid3(segs.slant.a, segs.slant.b))[0] < proj(centre)[0]) {
+        pool.lateralEdge = lateralOn(1);
+      }
+
+      /* צד ברירת המחדל של כל תווית, והנקודה שעליה היא יושבת לאורך הקטע.
+         השבר השונה לכל קטע פורש את המספרים לגובהי מסך שונים. */
+      var SIDE = { height: -1, slant: -1, lateralEdge: 1 };
+      var ALONG = { height: 0.55, slant: 0.72, lateralEdge: 0.38 };
+      /* מידות של הבסיס נכתבות מתחתיו, לא לצדו */
+      var BELOW = { baseEdge: 1, baseArea: 1 };
+      var placed = [];
+
+      var lerp3 = function (a, b, t) {
+        return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+      };
+
+      Object.keys(opts.measures).forEach(function (key) {
+        var seg = pool[key], cfg = opts.measures[key];
+        if (!seg || !cfg) return;
+        var text = (typeof cfg === 'string') ? cfg : cfg.text;
+        if (!text) return;
+        var sign = (cfg && cfg.side === 'start') ? -1
+                 : (cfg && cfg.side === 'end') ? 1
+                 : (SIDE[key] || 1);
+
+        var t0 = (cfg && typeof cfg.along === 'number') ? cfg.along : (ALONG[key] || 0.5);
+        var m = proj(lerp3(seg.a, seg.b, t0));
+
+        var down = !!BELOW[key];
+        /* מתחת לבסיס כולו, לא רק מתחת לאמצע הצלע הקדמית */
+        var floor = m[1];
+        if (down) {
+          g.baseVertices.forEach(function (bv) {
+            var q = proj(bv); if (q[1] > floor) floor = q[1];
+          });
+        }
+        var off = down ? 20 : 26, x = 0, y = 0, tries = 0;
+        do {
+          x = down ? m[0] : m[0] + sign * off;
+          y = down ? floor + off : m[1] + 5;
+          var clash = placed.some(function (q) {
+            return Math.abs(q[0] - x) < 38 && Math.abs(q[1] - y) < 21;
+          });
+          if (!clash) break;
+          off += 16;
+        } while (++tries < 5);
+        placed.push([x, y]);
+
+        /* קו מוביל קצר מהמספר אל הקטע שהוא מודד. בלעדיו, כששני קטעים
+           יוצאים מאותו קודקוד, אי אפשר לדעת לאיזה מהם שייך המספר. */
+        if (!down) {
+          gm.appendChild(make('line', {
+            x1: (x - sign * 15).toFixed(2), y1: (y - 4).toFixed(2),
+            x2: m[0].toFixed(2), y2: m[1].toFixed(2),
+            class: 'sv-leader'
+          }));
+        }
+
+        var t = make('text', {
+          x: x.toFixed(2), y: y.toFixed(2),
+          class: 'sv-measure', 'text-anchor': 'middle', dir: 'ltr'
+        });
+        t.textContent = text;
+        gm.appendChild(t);
+      });
+      svg.appendChild(gm);
+    }
 
     /* --- תוויות טקסט --- */
     if (opts.labels && opts.labels.length) {
