@@ -20,40 +20,56 @@
 
 /* גם בתוך הניווט הסדר נקבע ב-DOM ולא בכיוון הדף, וכל כפתור
    מחזיר לעצמו כיוון עברי לטקסט שבתוכו. */
-.site-nav {
-  direction: ltr;
-  flex-wrap: wrap;
-}
+.site-nav { direction: ltr; }
 
 .site-nav .nav-btn { direction: rtl; }
 
 /* במסך צר הכול נערם, באותו סדר, עם שם האתר למעלה */
+
+
+/* ---------- ברכה בכותרת העליונה ----------
+   ברכה, לא כפתור: בלי מסגרת, בלי רקע ובלי סמן עכבר של קישור.
+   קו זהב דק מפריד בינה לבין פריטי הניווט. */
+.site-hello {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding-inline: var(--sp-2) var(--sp-4);
+  color: #C8B48A;
+  font-size: var(--fs-xs);
+  letter-spacing: .01em;
+  white-space: nowrap;
+  border-inline-end: 1px solid rgba(224, 163, 46, .28);
+}
+
+.site-hello__text { display: inline-block; }
+
+/* ההתאמות למסך צר באות אחרי כללי הבסיס, אחרת הן מפסידות בקדימות */
 @media (max-width: 860px) {
   .site-header__inner {
     flex-direction: column;
     align-items: stretch;
   }
   .site-header__inner .brand { order: -1; margin-inline: 0; }
-  .site-nav { flex-direction: column; }
+  .site-nav { flex-direction: column; gap: 2px; }
   .site-nav .nav-btn { justify-content: flex-start; }
+  /* בערימה המפריד הופך לקו אופקי מתחת לברכה */
+  .site-hello {
+    border-inline-end: 0;
+    border-block-end: 1px solid rgba(224, 163, 46, .22);
+    padding-block-end: var(--sp-2);
+    padding-inline: var(--sp-2);
+  }
+  /* פירמידת הסימון עוברת לצד הפריט במקום מתחתיו */
+  .site-nav .nav-btn[aria-current="page"]::after {
+    inset-block-end: auto;
+    inset-block-start: 50%;
+    inset-inline-start: auto;
+    inset-inline-end: var(--sp-2);
+    translate: 0 -50%;
+    rotate: 90deg;
+  }
 }
-
-/* ---------- ברכה בכותרת העליונה ---------- */
-.site-hello {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-2);
-  margin: 0;
-  padding: var(--sp-2) var(--sp-4);
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, .07);
-  border: 1px solid rgba(255, 255, 255, .18);
-  color: #DCE3EE;
-  font-size: var(--fs-xs);
-  white-space: nowrap;
-}
-
-.nav-btn__glyph { font-size: 1.05em; }
 
 /* ============================================================
    הכותרת הגדולה: נוף מדבר מצויר, וטקסט אמיתי מעליו

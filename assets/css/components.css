@@ -9,9 +9,25 @@
   position: sticky;
   inset-block-start: 0;
   z-index: 50;
-  background: var(--ink);
   color: var(--text-invert);
-  border-block-end: 3px solid var(--gold);
+  /* אבן חול כהה מעל, כחול לילה מתחת, כמו שמי הדמדומים שבאיור */
+  background:
+    linear-gradient(180deg, #1B2B45 0%, var(--ink) 62%, #101B2E 100%);
+  box-shadow: 0 2px 14px rgba(8, 14, 26, .35);
+}
+
+/* קו הזהב שסוגר את הכותרת. בהיר במרכז ועמוק בקצוות, כמו אור נמוך
+   על אבן. עליו יושבת פירמידת הסימון של העמוד הפעיל. */
+.site-header::after {
+  content: "";
+  display: block;
+  block-size: 3px;
+  background: linear-gradient(90deg,
+    var(--gold-deep) 0%,
+    var(--gold) 28%,
+    #F3C86B 50%,
+    var(--gold) 72%,
+    var(--gold-deep) 100%);
 }
 
 .site-header__inner {
@@ -32,7 +48,6 @@
   gap: var(--sp-3);
   text-decoration: none;
   color: inherit;
-  margin-inline-end: auto;
 }
 
 .brand__mark { flex: none; inline-size: 34px; block-size: 34px; }
@@ -48,34 +63,69 @@
 
 .brand__sub {
   font-size: var(--fs-xs);
-  color: #C9D2E0;
+  color: #C2CDDD;
 }
 
-.site-nav { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+/* ---------- פריטי הניווט ----------
+   בלי כפתורי גלולה. קישור הוא טקסט וסמל, והמצב הפעיל מסומן
+   בפירמידת זהב קטנה מתחתיו ולא ברקע מלא וגדול. */
+.site-nav { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
 
 .nav-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
   min-block-size: 44px;
-  border: 1px solid rgba(255, 255, 255, .22);
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, .07);
-  color: var(--text-invert);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: #D7E0EC;
   font-size: var(--fs-sm);
   font-weight: 500;
   text-decoration: none;
-  transition: background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+  transition:
+    color var(--dur-1) var(--ease),
+    background-color var(--dur-1) var(--ease);
 }
 
-.nav-btn:hover { background: rgba(255, 255, 255, .16); }
+.nav-btn__icon {
+  flex: none;
+  inline-size: 21px;
+  block-size: 21px;
+  color: var(--gold);
+  opacity: .78;
+  transition: opacity var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
 
+.nav-btn:hover {
+  background: rgba(224, 163, 46, .12);
+  color: #FFFFFF;
+}
+
+.nav-btn:hover .nav-btn__icon { opacity: 1; }
+
+/* העמוד הפעיל: זהב, ופירמידה קטנה שיושבת על קו הזהב שבתחתית */
 .nav-btn[aria-current="page"] {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--ink);
+  color: var(--gold);
   font-weight: 700;
+  background: rgba(224, 163, 46, .10);
+}
+
+.nav-btn[aria-current="page"] .nav-btn__icon { opacity: 1; }
+
+.nav-btn[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset-block-end: -9px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  inline-size: 15px;
+  block-size: 8px;
+  background: var(--gold);
+  /* משולש שמצביע כלפי מעלה, בלי להיעזר במאפיינים פיזיים */
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
 /* ============================================================

@@ -59,24 +59,26 @@
        ה-DOM, הסדר על המסך וסדר מקש Tab זהים לחלוטין.
        ------------------------------------------------------------ */
 
-    /* ברכה בלבד. אין כאן שם, אין הרשמה ואין שמירה של שום פרט אישי. */
+    /* ברכה בלבד. אין כאן שם, אין הרשמה ואין שמירה של שום פרט אישי.
+       זו אינה קישור ואינה כפתור, ולכן היא גם לא נראית כזאת. */
     var hello = el('p', { class: 'site-hello' }, [
-      el('span', { class: 'site-hello__mark', 'aria-hidden': 'true', text: '👋' }),
-      el('span', { text: S.site.greeting })
+      el('span', { class: 'site-hello__text', text: S.site.greeting })
     ]);
 
-    function pill(href, key, glyph, label) {
+    /* הסמל מצויר ב-SVG ויורש את צבע הקישור, ולכן הוא משתנה יחד איתו
+       במעבר עכבר, בעמוד הפעיל ובמיקוד מקלדת. */
+    function pill(href, key, icon, label) {
       return el('a', { class: 'nav-btn', href: href, 'data-nav': key }, [
-        el('span', { class: 'nav-btn__glyph', 'aria-hidden': 'true', text: glyph }),
+        App.icons[icon]('nav-btn__icon'),
         el('span', { class: 'nav-btn__label', text: label })
       ]);
     }
 
     var nav = el('nav', { class: 'site-nav', 'aria-label': 'ניווט ראשי' }, [
-      pill('#/progress', 'progress', '⭐', S.nav.progress),
-      pill('#/toolbox', 'toolbox', '🧰', S.nav.toolbox),
-      pill('#/final', 'final', '🏆', D.finalExam.title),
-      pill('#/', 'home', '🏠', S.nav.home)
+      pill('#/progress', 'progress', 'navProgress', S.nav.progress),
+      pill('#/toolbox', 'toolbox', 'navToolbox', S.nav.toolbox),
+      pill('#/final', 'final', 'navExam', D.finalExam.title),
+      pill('#/', 'home', 'navHome', S.nav.home)
     ]);
 
     var brand = el('a', { class: 'brand', href: '#/' }, [
