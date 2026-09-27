@@ -65,18 +65,43 @@
   overflow: hidden;
   margin-block-end: var(--sp-6);
   box-shadow: var(--sh-2);
-  min-block-size: 300px;
+  /* הגובה נגזר מהרוחב, ולכן הנוף נחתך במקום להימתח */
+  min-block-size: clamp(320px, 34vw, 460px);
   display: grid;
   place-items: center;
   padding: var(--sp-7) var(--sp-5);
 }
 
-.hero .scene {
+.hero__scene {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* object-fit: cover חותך את הנוף לפי המסגרת ואינו מעוות אותו.
+   המוקד מעט מעל המרכז, כדי שהפירמידות יישארו בתמונה גם במסך נמוך. */
+.hero__bg {
   inline-size: 100%;
   block-size: 100%;
-  z-index: -2;
+  object-fit: cover;
+  object-position: 50% 42%;
+  display: block;
+}
+
+/* דמות החוקר, חיתוך שקוף, יושבת בפינה ואינה מכסה את הכותרת */
+.hero__explorer {
+  position: absolute;
+  z-index: 1;
+  inset-block-end: -2%;
+  /* הדמות שייכת לצד שמאל של הקומפוזיציה. בתיבה בכיוון ימין־לשמאל
+     הצד השמאלי הוא inline-end. */
+  inset-inline-end: var(--sp-3);
+  z-index: 2;
+  inline-size: clamp(120px, 15vw, 210px);
+  block-size: auto;
+  filter: drop-shadow(0 10px 18px rgba(24, 16, 4, .45));
+  pointer-events: none;
 }
 
 /* שכבת כהות עדינה, כדי שהכותרת תישאר קריאה מעל הציור */
@@ -84,16 +109,22 @@
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 1;
+  pointer-events: none;
   background:
-    radial-gradient(60% 55% at 50% 52%, rgba(12, 21, 38, .52), rgba(12, 21, 38, 0) 72%),
+    radial-gradient(58% 54% at 50% 48%, rgba(12, 21, 38, .58), rgba(12, 21, 38, 0) 74%),
     linear-gradient(180deg,
-      rgba(12, 21, 38, .04) 0%,
-      rgba(12, 21, 38, .22) 70%,
-      rgba(12, 21, 38, .34) 100%);
+      rgba(12, 21, 38, .10) 0%,
+      rgba(12, 21, 38, .26) 68%,
+      rgba(12, 21, 38, .40) 100%);
 }
 
-.hero__body { text-align: center; max-inline-size: 30ch; }
+.hero__body {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  max-inline-size: 30ch;
+}
 
 .hero__title {
   font-family: var(--font-display);
@@ -122,6 +153,7 @@
 /* פתק הפפירוס עם משפט העידוד */
 .hero__note {
   position: absolute;
+  z-index: 3;
   inset-block-start: var(--sp-4);
   inset-inline-start: var(--sp-4);
   max-inline-size: 16ch;
@@ -185,7 +217,8 @@
 .unit-card {
   position: relative;
   display: block;
-  padding: var(--sp-6) var(--sp-5) var(--sp-5);
+  padding: 0 0 var(--sp-5);
+  overflow: hidden;
   border-radius: var(--r-lg);
   border: 2px solid var(--line);
   background: var(--surface);
@@ -214,8 +247,39 @@
 .unit-card--2 { background: linear-gradient(180deg, var(--unit-2-wash), var(--surface) 62%); }
 
 /* עיגול מספר היחידה */
+/* האיור יושב בראש הכרטיס ביחס גובה־רוחב קבוע, ונחתך ולא נמתח */
+.unit-card__art {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--sand-deep);
+}
+
+.unit-card__img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  display: block;
+}
+
+/* מעבר רך מהאיור אל הטקסט שמתחתיו */
+.unit-card__art::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 38%;
+  background: linear-gradient(180deg, transparent, var(--surface));
+  pointer-events: none;
+}
+.unit-card--1 .unit-card__art::after { background: linear-gradient(180deg, transparent, var(--unit-1-wash)); }
+.unit-card--2 .unit-card__art::after { background: linear-gradient(180deg, transparent, var(--unit-2-wash)); }
+
 .unit-card__badge {
   position: absolute;
+  z-index: 2;
   inset-block-start: var(--sp-4);
   inset-inline-end: var(--sp-4);
   inline-size: 62px;
@@ -234,7 +298,7 @@
 .unit-card__badge-word { display: block; font-size: 11px; font-weight: 500; }
 .unit-card__badge-num  { display: block; font-size: 22px; font-weight: 700; font-family: var(--font-display); }
 
-.unit-card__body { padding-inline-end: 74px; }
+.unit-card__body { padding: var(--sp-5) var(--sp-5) 0; }
 
 .unit-card__title {
   margin: 0;
@@ -260,7 +324,7 @@
   padding-inline-end: 0;
 }
 
-.unit-card__body > .unit-card__desc { padding-inline-end: 0; }
+
 
 .unit-card__done {
   margin-block: var(--sp-4) var(--sp-2);
@@ -290,7 +354,6 @@
 
 @media (max-width: 560px) {
   .unit-card__badge { inline-size: 52px; block-size: 52px; }
-  .unit-card__body  { padding-inline-end: 62px; }
   .unit-card__badge-num { font-size: 19px; }
 }
 
@@ -322,7 +385,20 @@
 
 .mini-card:hover { transform: translateY(-3px); box-shadow: var(--sh-2); }
 
-.mini-card__glyph { font-size: 2.4rem; line-height: 1; }
+/* איור הכרטיס הקטן שקוף, ולכן הוא מוצג במלואו ולא נחתך */
+.mini-card__art {
+  display: block;
+  inline-size: clamp(96px, 26%, 132px);
+  aspect-ratio: 1 / 1;
+}
+
+.mini-card__img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 6px 10px rgba(24, 16, 4, .18));
+}
 
 .mini-card__title {
   margin: 0;
@@ -348,19 +424,36 @@
    פס החול עם משפט הסיום
    ============================================================ */
 .sand-band {
+  position: relative;
   margin: 0;
-  padding: var(--sp-5) var(--sp-4);
-  text-align: center;
   border-radius: var(--r-md);
-  background:
-    repeating-linear-gradient(90deg,
-      transparent 0 58px,
-      rgba(169, 124, 67, .16) 58px 60px),
-    linear-gradient(180deg, var(--dune-far), var(--dune-near));
+  overflow: hidden;
+  border: 2px solid var(--stone-shade);
+  /* רצועת הפפירוס נפרשת לרוחב ונחתכת בגובה. היא רקע בלבד, והמשפט
+     עצמו הוא טקסט אמיתי מעליה. */
+  background-image: url("../img/band-parchment.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-block-size: 108px;
+  display: grid;
+  place-items: center;
+}
+
+.sand-band__text {
+  margin: 0;
+  padding: var(--sp-5) var(--sp-5);
+  text-align: center;
   color: #5A3E16;
   font-weight: 700;
   font-size: var(--fs-md);
-  border: 2px solid var(--stone-shade);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .55);
+}
+
+/* במסך צר הרצועה נשארת קריאה: פחות חיתוך, יותר מקום לטקסט */
+@media (max-width: 560px) {
+  .sand-band { background-size: auto 100%; min-block-size: 96px; }
+  .sand-band__text { font-size: var(--fs-base); }
 }
 
 /* ============================================================

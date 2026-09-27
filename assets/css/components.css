@@ -82,7 +82,8 @@
    Hero
    ============================================================ */
 .hero {
-  background: linear-gradient(160deg, var(--ink) 0%, var(--ink-soft) 100%);
+  /* הרקע מגיע מהאיור עצמו (ראו home.css). גרדיאנט אטום כאן היה מסתיר
+     אותו לגמרי, שכן שכבת הנוף יושבת מתחת לרקע של האלמנט. */
   color: var(--text-invert);
   border-radius: var(--r-lg);
   padding: var(--sp-6) var(--sp-4);
