@@ -50,19 +50,21 @@
     /* ------------------------------------------------------------
        סדר הפריטים בכותרת
        ------------------------------------------------------------
-       הסדר נקבע: שלום תלמיד/ה, ההתקדמות שלי, ארגז הכלים, מבחן סיום,
-       דף הבית. במסך רחב זה הסדר משמאל לימין, ובמסך צר מלמעלה למטה.
+       מימין לשמאל: שם האתר, דף הבית, הברכה, התקדמות שלי, ארגז הכלים,
+       מבחן סיום.
 
-       כדי שהסדר לא יתהפך בגלל שהדף כולו בכיוון ימין־לשמאל, שורת
-       הכותרת מסודרת בכיוון שמאל־לימין (ראו .site-header__inner
-       ב-home.css), וכל פריט בתוכה מחזיר לעצמו כיוון עברי. כך סדר
-       ה-DOM, הסדר על המסך וסדר מקש Tab זהים לחלוטין.
+       הסדר הזה הוא סדר ה-DOM ממש, בתוך מיכל בכיוון ימין־לשמאל. אין
+       כאן היפוך חזותי, אין row-reverse ואין order, ולכן סדר הקריאה,
+       הסדר על המסך וסדר מקש Tab הם אותו סדר אחד. במסך צר אותה שרשרת
+       נערמת מלמעלה למטה, גם היא בלי שינוי סדר.
        ------------------------------------------------------------ */
 
-    /* ברכה בלבד. אין כאן שם, אין הרשמה ואין שמירה של שום פרט אישי.
-       זו אינה קישור ואינה כפתור, ולכן היא גם לא נראית כזאת. */
-    var hello = el('p', { class: 'site-hello' }, [
-      el('span', { class: 'site-hello__text', text: S.site.greeting })
+    var brand = el('a', { class: 'brand', href: '#/' }, [
+      App.icons.brand('brand__mark'),
+      el('span', { class: 'brand__text' }, [
+        el('span', { class: 'brand__title', text: S.site.title }),
+        el('span', { class: 'brand__sub', text: S.site.tagline })
+      ])
     ]);
 
     /* הסמל מצויר ב-SVG ויורש את צבע הקישור, ולכן הוא משתנה יחד איתו
@@ -74,23 +76,23 @@
       ]);
     }
 
-    var nav = el('nav', { class: 'site-nav', 'aria-label': 'ניווט ראשי' }, [
-      pill('#/progress', 'progress', 'navProgress', S.nav.progress),
-      pill('#/toolbox', 'toolbox', 'navToolbox', S.nav.toolbox),
-      pill('#/final', 'final', 'navExam', D.finalExam.title),
-      pill('#/', 'home', 'navHome', S.nav.home)
+    /* ברכה בלבד. אין כאן שם, אין הרשמה ואין שמירה של שום פרט אישי.
+       זו פסקה ולא קישור, ולכן מקש Tab מדלג עליה, והיא גם לא נראית
+       כמשהו שאפשר ללחוץ עליו. מקומה בין דף הבית לבין התקדמות שלי. */
+    var hello = el('p', { class: 'site-hello' }, [
+      el('span', { class: 'site-hello__text', text: S.site.greeting })
     ]);
 
-    var brand = el('a', { class: 'brand', href: '#/' }, [
-      App.icons.brand('brand__mark'),
-      el('span', { class: 'brand__text' }, [
-        el('span', { class: 'brand__title', text: S.site.title }),
-        el('span', { class: 'brand__sub', text: S.site.tagline })
-      ])
+    var nav = el('nav', { class: 'site-nav', 'aria-label': 'ניווט ראשי' }, [
+      pill('#/', 'home', 'navHome', S.nav.home),
+      hello,
+      pill('#/progress', 'progress', 'navProgress', S.nav.progressHeader),
+      pill('#/toolbox', 'toolbox', 'navToolbox', S.nav.toolbox),
+      pill('#/final', 'final', 'navExam', D.finalExam.title)
     ]);
 
     doc.getElementById('site-header').appendChild(
-      el('div', { class: 'site-header__inner' }, [hello, nav, brand])
+      el('div', { class: 'site-header__inner' }, [brand, nav])
     );
   }
 

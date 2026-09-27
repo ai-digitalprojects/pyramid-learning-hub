@@ -5,26 +5,11 @@
    ============================================================ */
 
 /* ---------- סדר הכותרת העליונה ----------
-   הדף כולו בכיוון ימין־לשמאל, אבל סדר הפריטים בכותרת נקבע מראש:
-   שלום תלמיד/ה, ההתקדמות שלי, ארגז הכלים, מבחן סיום, דף הבית.
-   השורה מסודרת בכיוון שמאל־לימין כדי שסדר ה-DOM יהיה גם הסדר על
-   המסך וגם סדר מקש Tab, וכל פריט בתוכה מחזיר לעצמו כיוון עברי. */
-.site-header__inner {
-  direction: ltr;
-  justify-content: flex-start;
-}
-
-.site-header__inner > * { direction: rtl; }
-
-.site-header__inner .brand { margin-inline: auto 0; }
-
-/* גם בתוך הניווט הסדר נקבע ב-DOM ולא בכיוון הדף, וכל כפתור
-   מחזיר לעצמו כיוון עברי לטקסט שבתוכו. */
-.site-nav { direction: ltr; }
-
-.site-nav .nav-btn { direction: rtl; }
-
-/* במסך צר הכול נערם, באותו סדר, עם שם האתר למעלה */
+   הכותרת יורשת את כיוון הדף, ימין־לשמאל, ופשוט מסתדרת לפי סדר ה-DOM:
+   שם האתר, דף הבית, שלום תלמיד/ה, התקדמות שלי, ארגז הכלים, מבחן סיום.
+   אין כאן direction הפוך, אין row-reverse ואין order, ולכן הסדר על
+   המסך, סדר הקריאה וסדר מקש Tab הם אותו סדר אחד בדיוק. */
+.site-header__inner { justify-content: flex-start; }
 
 
 /* ---------- ברכה בכותרת העליונה ----------
@@ -50,7 +35,7 @@
     flex-direction: column;
     align-items: stretch;
   }
-  .site-header__inner .brand { order: -1; margin-inline: 0; }
+  /* שם האתר כבר ראשון ב-DOM, ולכן אין צורך להזיז אותו */
   .site-nav { flex-direction: column; gap: 2px; }
   .site-nav .nav-btn { justify-content: flex-start; }
   /* בערימה המפריד הופך לקו אופקי מתחת לברכה */
@@ -188,7 +173,9 @@
 
 @media (max-width: 720px) {
   .hero__note { position: static; transform: none; max-inline-size: none; margin-block-start: var(--sp-5); }
-  .hero { padding-block: var(--sp-6); }
+  /* מקום בראש הכותרת לסמל בית הספר שיושב בפינה, כדי שהכותרת
+     הראשית לא תיגע בו */
+  .hero { padding-block: calc(var(--sp-6) + 58px) var(--sp-6); }
 }
 
 /* ============================================================
@@ -601,3 +588,28 @@
 }
 
 .unit-onward { min-inline-size: min(360px, 100%); }
+
+/* ---------- סמל בית הספר ----------
+   יושב בפינה השמאלית העליונה של הכותרת הגדולה, מול פתק הפפירוס
+   שמימין. הפינה הזאת ריקה באיור, ולכן הסמל אינו מסתיר דבר.
+   במסך צר הוא עובר לשורה משלו מתחת לכותרת. */
+.hero__logo {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: var(--sp-4);
+  /* בתיבה בכיוון ימין־לשמאל, inline-end הוא הצד השמאלי */
+  inset-inline-end: var(--sp-4);
+  inline-size: clamp(74px, 8vw, 104px);
+  block-size: auto;
+  filter: drop-shadow(0 4px 12px rgba(24, 16, 4, .45));
+}
+
+/* במסך צר הוא נשאר בפינה, קטן יותר. הפינה הזאת היא שמיים בלבד,
+   ולכן הוא אינו מתנגש בדמות החוקר שבתחתית. */
+@media (max-width: 720px) {
+  .hero__logo {
+    inset-block-start: var(--sp-3);
+    inset-inline-end: var(--sp-3);
+    inline-size: 66px;
+  }
+}

@@ -58,7 +58,11 @@
         el('p', { class: 'hero__meta', text: S.site.meta })
       ]),
       /* פתק פפירוס עם משפט העידוד */
-      el('p', { class: 'hero__note', text: S.site.heroNote })
+      el('p', { class: 'hero__note', text: S.site.heroNote }),
+      /* סמל בית הספר, בפינה הנגדית לפתק */
+      img('school-logo.webp',
+        'סמל בית ספר גבים באר שבע, חינוך למצוינות לספורט ולמדעי הבריאות.',
+        'hero__logo', { w: 380, h: 440, eager: true })
     ]);
 
     /* ---------- כרטיסי היחידות ---------- */

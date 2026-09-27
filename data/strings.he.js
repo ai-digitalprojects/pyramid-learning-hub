@@ -21,6 +21,8 @@ window.PyramidData.strings = {
     home:     'דף הבית',
     toolbox:  'ארגז הכלים',
     progress: 'ההתקדמות שלי',
+    /* בכותרת העליונה הניסוח קצר יותר. שאר האתר ממשיך להשתמש ב-progress */
+    progressHeader: 'התקדמות שלי',
     back:     'חזרה',
     skip:     'דילוג לתוכן הראשי'
   },
