@@ -345,7 +345,9 @@ circle.pp-hl   { fill: var(--warn); r: 9; stroke: var(--surface); stroke-width: 
   outline: none;
 }
 
-line.pp-hit   { stroke-width: 30; stroke-linecap: round; }
+/* רצועת הלחיצה סביב צלע דקה. רחבה מספיק למגע, אך לא רחבה כל כך
+   שתבלע את שטח הבסיס שמתחתיה. */
+line.pp-hit   { stroke-width: 17; stroke-linecap: round; }
 circle.pp-hit { stroke-width: 0; }
 
 .pp-hits--off { pointer-events: none; }

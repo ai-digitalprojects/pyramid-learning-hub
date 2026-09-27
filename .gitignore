@@ -4,6 +4,8 @@
 source-materials/
 *.pdf
 *.PDF
+*.docx
+*.DOCX
 
 # Scanned / extracted page images from reference material
 page-extracts/

@@ -339,21 +339,65 @@
     var want = opts.pickable || ['base', 'face', 'base-edge', 'lateral-edge', 'base-vertex', 'apex'];
     function wants(p) { return want.indexOf(p) >= 0; }
 
-    /* הבסיס ראשון — הוא הגדול ביותר, ולכן נשאר מתחת לכל השאר.
-       אחריו הפאות הצדדיות הגלויות, מהרחוקה לקרובה. */
-    d.faces.filter(function (f) { return f.part === 'base' || f.part === 'top'; })
-      .forEach(function (f) {
+    /* ------------------------------------------------------------
+       סדר אזורי הלחיצה נקבע לפי מה שהתלמיד רואה, ולא לפי סדר הציור.
+
+       הפאות הצדדיות נפרשות מצלעות הבסיס ועד קודקוד הראש, ולכן ההיטל
+       שלהן מכסה חלק גדול ממצולע הבסיס. במבט מלפנים ומהצד נשארת רצועת
+       בסיס גלויה, והתלמיד רואה אותה בבירור בצבע הזהב — ולכן שם הבסיס
+       מונח מעל הפאות. במבט מלמעלה הפאות מרצפות את הבסיס במדויק והוא
+       אינו נראה כלל, ולכן שם הוא נשאר מתחתיהן.
+
+       ההחלטה נגזרת מהגאומטריה עצמה: בודקים היכן נופל קודקוד הראש.
+       ------------------------------------------------------------ */
+    function polyOf(f) { return f.pts.map(function (p) { var q = proj(p); return [q[0], q[1]]; }); }
+
+    function pointInPoly(x, y, P) {
+      var inside = false;
+      for (var a = 0, b = P.length - 1; a < P.length; b = a++) {
+        var xi = P[a][0], yi = P[a][1], xj = P[b][0], yj = P[b][1];
+        if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside;
+      }
+      return inside;
+    }
+
+    /** האם אנחנו מסתכלים על הגוף "מהקצה" — כלומר קודקוד הראש נופל
+        בתוך מצולע הבסיס? במבט כזה הפאות מרצפות את הבסיס במדויק,
+        הבסיס אינו נראה כשטח נפרד, ולכן הפאות חייבות לקבל עדיפות.
+        במבט מלפנים ומהצד הבסיס הוא רצועה נפרדת בתחתית הציור,
+        התלמיד רואה אותה בזהב — ושם הבסיס מקבל עדיפות. */
+    function viewIsEndOn(baseFace) {
+      var B = polyOf(baseFace);
+      var far = g.kind === 'pyramid'
+        ? g.apex
+        : avg(g.topVertices);
+      var q = proj(far);
+      return pointInPoly(q[0], q[1], B);
+    }
+
+    var baseFaces = d.faces.filter(function (f) { return f.part === 'base' || f.part === 'top'; });
+    /* תמיד בודקים מול הבסיס התחתון, גם בגוף שיש לו בסיס עליון */
+    var testFace = baseFaces.filter(function (f) { return f.part === 'base'; })[0] || baseFaces[0];
+    var baseOnTop = testFace ? !viewIsEndOn(testFace) : false;
+
+    function addFaceHits() {
+      d.faces.filter(function (f) { return f.part === 'face'; })
+        .sort(function (a, b) { return a.depth - b.depth; })
+        .forEach(function (f) {
+          if (!f.visible || !wants(f.part)) return;
+          hit(make('polygon', { points: f.pts.map(pt).join(' ') }), f.part, f.index,
+            partNames[f.part] + ' מספר ' + (f.index + 1));
+        });
+    }
+    function addBaseHits() {
+      baseFaces.forEach(function (f) {
         if (!wants(f.part)) return;
         hit(make('polygon', { points: f.pts.map(pt).join(' ') }), f.part, f.index, partNames[f.part]);
       });
+    }
 
-    d.faces.filter(function (f) { return f.part === 'face'; })
-      .sort(function (a, b) { return a.depth - b.depth; })
-      .forEach(function (f) {
-        if (!f.visible || !wants(f.part)) return;
-        hit(make('polygon', { points: f.pts.map(pt).join(' ') }), f.part, f.index,
-          partNames[f.part] + ' מספר ' + (f.index + 1));
-      });
+    if (baseOnTop) { addFaceHits(); addBaseHits(); }
+    else { addBaseHits(); addFaceHits(); }
 
     d.edges.forEach(function (e) {
       if (!e.visible || !wants(e.part)) return;
