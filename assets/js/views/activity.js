@@ -44,7 +44,11 @@
         ]),
         el('p', { text: act.desc })
       ]),
-      el('div', {}, [ UI.stateChip(rec.state) ])
+      /* מסומן במזהה התחנה. מאזין יחיד ב-main.js מרענן את השבב ברגע
+         שהתחנה נרשמת כהושלמה, כדי שלא יישאר כתוב "לא התחלתם" מעל
+         מסך סיכום של פעילות שזה עתה הסתיימה. */
+      el('div', { class: 'unit-banner__state', 'data-state-for': act.id },
+        [ UI.stateChip(rec.state) ])
     ]);
 
     var topRow = el('div', { class: 'btn-row', style: 'margin-block-end:var(--sp-4)' }, [

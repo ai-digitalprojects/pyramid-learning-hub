@@ -10,7 +10,11 @@ window.PyramidData.strings = {
     title:    'מסע אל הפירמידה',
     subtitle: 'לומדים, חוקרים ובונים',
     meta:     'הנדסה לכיתה ו׳ | בית ספר גבים',
-    eyebrow:  'גאומטריה במרחב'
+    eyebrow:  'גאומטריה במרחב',
+    tagline:  'לומדים · חוקרים · מגיעים לפסגה',
+    greeting: 'שלום, תלמיד/ה יקר/ה!',
+    heroLead: 'לומדים לבד, מגיעים רחוק יותר',
+    heroNote: 'כל אתגר הוא צעד נוסף אל הפסגה!'
   },
 
   nav: {
@@ -22,9 +26,17 @@ window.PyramidData.strings = {
   },
 
   hub: {
-    unitsHeading:   'היחידות שלנו',
-    unitsNote:      'מומלץ להתקדם לפי הסדר, אבל אפשר להיכנס לכל פעילות',
-    extrasHeading:  'עוד באתר'
+    unitsHeading:   'בחרו יחידה והמשיכו במסע',
+    unitsNote:      'כל היחידות וכל התחנות פתוחות תמיד. אפשר להתחיל מכל מקום ולחזור בכל רגע',
+    extrasHeading:  'עוד באתר',
+    stations:       'תחנות למסע',
+    stationsDone:   'תחנות הושלמו',
+    quote:          'כל תחנה במסע מחזקת אתכם לומדים עצמאיים'
+  },
+
+  celebrate: {
+    title: 'הגעתם לפסגה! סיימתם את היחידה',
+    note:  'כל התחנות ביחידה הזאת הושלמו. אפשר לחזור לכל תחנה בכל רגע.'
   },
 
   states: {
@@ -42,7 +54,8 @@ window.PyramidData.strings = {
     reset:      'איפוס התקדמות',
     print:      'הדפסת סיכום',
     backToUnit: 'חזרה ליחידה',
-    backHome:   'חזרה לדף הבית'
+    backHome:   'חזרה לדף הבית',
+    completed:  '✓ הושלם'
   },
 
   progress: {

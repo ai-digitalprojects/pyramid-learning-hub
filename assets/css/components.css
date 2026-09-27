@@ -215,11 +215,28 @@
   font-weight: 700;
   font-size: var(--fs-sm);
   text-decoration: none;
-  transition: transform var(--dur-1) var(--ease), filter var(--dur-1) var(--ease);
+  box-shadow: var(--sh-1);
+  /* 200–250ms, so the button answers the pointer straight away */
+  transition:
+    transform var(--dur-2) var(--ease),
+    box-shadow var(--dur-2) var(--ease),
+    filter var(--dur-2) var(--ease),
+    background-color var(--dur-2) var(--ease);
 }
 
-.btn:hover  { filter: brightness(1.06); }
-.btn:active { transform: translateY(1px); }
+/* Hover: the button lifts a little, its shadow deepens, its colour brightens. */
+.btn:hover {
+  filter: brightness(1.07);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2);
+}
+
+/* Press: down to 96–97% and straight back, so the click feels real. */
+.btn:active {
+  transform: scale(.965);
+  box-shadow: var(--sh-1);
+  transition-duration: 90ms;
+}
 
 .btn--primary { background: var(--ink);    color: var(--text-invert); }
 .btn--unit-1  { background: var(--unit-1); color: #fff; }
@@ -230,6 +247,7 @@
   background: transparent;
   color: var(--text);
   border-color: var(--line-strong);
+  box-shadow: none;
 }
 .btn--ghost:hover { background: var(--surface-alt); }
 
@@ -237,10 +255,57 @@
   background: transparent;
   color: var(--warn);
   border-color: var(--warn);
+  box-shadow: none;
 }
 .btn--danger:hover { background: var(--warn-wash); }
 
 .btn--block { inline-size: 100%; }
+
+/* The main call to action: bigger, wider, easy to find on a small screen. */
+.btn--lg {
+  min-block-size: 52px;
+  padding-inline: var(--sp-6);
+  font-size: var(--fs-md);
+}
+
+/* ------------------------------------------------------------
+   The next step in the journey
+   ------------------------------------------------------------
+   Exactly one button on a screen carries this. It breathes: a soft
+   halo spreads, tightens, and settles, over about two and a half
+   seconds. It is meant to be read as "this is where I go next", so
+   if every button glowed it would say nothing at all — App.cta()
+   enforces the one-per-screen rule.
+   ------------------------------------------------------------ */
+.btn--cta {
+  position: relative;
+  animation: cta-breathe var(--dur-glow) var(--ease) infinite;
+}
+
+@keyframes cta-breathe {
+  0%, 100% {
+    box-shadow: var(--sh-2), 0 0 0 0 rgba(224, 163, 46, .40);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: var(--sh-2), 0 0 0 9px rgba(224, 163, 46, 0);
+    transform: scale(1.02);
+  }
+}
+
+/* Hover and press still win: the learner's own action comes first. */
+.btn--cta:hover  { animation-play-state: paused; }
+.btn--cta:active { animation-play-state: paused; }
+
+/* A station that is already finished says so, and never glows. */
+.btn--done {
+  background: var(--success-wash);
+  color: var(--success);
+  border-color: var(--success);
+  animation: none;
+  box-shadow: none;
+}
+.btn--done:hover { filter: none; background: var(--success-wash); }
 
 .btn[disabled],
 .btn[aria-disabled="true"] {
@@ -248,6 +313,18 @@
   cursor: not-allowed;
   filter: none;
   transform: none;
+  animation: none;
+}
+
+/* Nothing moves for a learner who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: background-color var(--dur-1) linear; }
+  .btn:hover, .btn:active { transform: none; }
+  .btn--cta {
+    animation: none;
+    /* still marked out, just without movement */
+    box-shadow: var(--sh-2), 0 0 0 4px rgba(224, 163, 46, .35);
+  }
 }
 
 .btn-row {

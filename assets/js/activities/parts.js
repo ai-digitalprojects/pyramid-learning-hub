@@ -104,6 +104,9 @@
           ])
         ])
       ]));
+      /* הכפתור שממשיך הלאה במסך הזה */
+      App.Kit.markNext(mount, '.btn--lg');
+
     }
 
     /* ============================================================
@@ -155,6 +158,9 @@
         ]),
         el('div', { class: 'btn-row btn-row--center' }, [prevBtn, nextBtn])
       ]));
+      /* הכפתור שממשיך הלאה במסך הזה */
+      App.Kit.markNext(mount, '.btn--lg');
+
 
       UI.announce(s.title + '. ' + s.text);
     }

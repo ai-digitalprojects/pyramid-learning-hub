@@ -1,5 +1,11 @@
 /* ============================================================
    views/hub.js — דף הבית
+   ------------------------------------------------------------
+   הכותרת הגדולה היא נוף מדבר מצויר (scene.js), ומעליו טקסט אמיתי.
+   מתחתיו שתי יחידות המסע, ואז שלוש הכניסות הנוספות.
+
+   כל היחידות וכל התחנות פתוחות תמיד. אין כאן נעילה ואין סדר מחייב,
+   ולכן אין גם שום כפתור חסום.
    ============================================================ */
 (function (global) {
   'use strict';
@@ -13,72 +19,134 @@
 
     var units = [D.unit1, D.unit2];
 
+    /* ---------- הכותרת הגדולה ---------- */
     var hero = el('section', { class: 'hero' }, [
-      el('p', { class: 'hero__eyebrow', text: S.site.eyebrow }),
-      el('h1', { text: S.site.title }),
-      el('p', { class: 'hero__sub', text: S.site.subtitle }),
-      el('p', { class: 'hero__meta', text: S.site.meta }),
-      App.icons.pyramidOutline('hero__deco')
+      App.Scene.desert(),
+      el('div', { class: 'hero__body' }, [
+        el('h1', { class: 'hero__title', text: S.site.title }),
+        el('p', { class: 'hero__sub', text: S.site.heroLead }),
+        el('p', { class: 'hero__meta', text: S.site.meta })
+      ]),
+      /* פתק פפירוס עם משפט העידוד */
+      el('p', { class: 'hero__note', text: S.site.heroNote })
     ]);
 
     /* ---------- כרטיסי היחידות ---------- */
-    var unitCards = units.map(function (u) {
-      var pct = Store.unitPercent(u.activities);
-      var done = Store.countDone(u.activities);
-      var started = done > 0;
+    function dots(done, total) {
+      var wrap = el('div', {
+        class: 'dots',
+        role: 'img',
+        'aria-label': done + ' מתוך ' + total + ' ' + S.hub.stationsDone
+      });
+      for (var i = 0; i < total; i++) {
+        wrap.appendChild(el('span', {
+          class: 'dots__dot' + (i < done ? ' dots__dot--on' : ''),
+          'aria-hidden': 'true'
+        }));
+      }
+      return wrap;
+    }
 
-      var card = el('a', {
-        class: 'card card--unit-' + u.id,
-        href: '#/unit/' + u.id
+    var unitCards = units.map(function (u) {
+      var total = u.activities.length;
+      var done = Store.countDone(u.activities);
+      var complete = done === total;
+
+      var label = complete ? S.actions.review
+                : done > 0 ? S.actions.continue + ' ' + u.short
+                : S.actions.start + ' ' + u.short;
+
+      var cta = el('span', {
+        class: 'btn btn--unit-' + u.id + ' btn--lg btn--block' + (complete ? ' btn--done' : ''),
+        'aria-hidden': 'true',
+        text: complete ? S.actions.completed : label
+      });
+
+      return el('a', {
+        class: 'unit-card unit-card--' + u.id,
+        href: '#/unit/' + u.id,
+        'aria-label': u.short + ': ' + u.title + '. ' +
+          done + ' מתוך ' + total + ' ' + S.hub.stationsDone + '.'
       }, [
-        el('div', { class: 'card__icon', 'aria-hidden': 'true', text: u.icon }),
-        el('h3', { class: 'card__title', text: u.short + ': ' + u.title }),
-        el('p',  { class: 'card__desc', text: u.lead }),
-        UI.progressBar(pct, 'unit-' + u.id,
-          done + ' מתוך ' + u.activities.length + ' פעילויות'),
-        el('span', {
-          class: 'btn btn--unit-' + u.id + ' btn--block',
-          'aria-hidden': 'true',
-          text: started ? S.actions.continue : S.actions.start
-        })
+        el('span', { class: 'unit-card__badge', 'aria-hidden': 'true' }, [
+          el('span', { class: 'unit-card__badge-word', text: 'יחידה' }),
+          el('span', { class: 'unit-card__badge-num' }, [UI.num(u.id)])
+        ]),
+        el('div', { class: 'unit-card__body' }, [
+          el('h3', { class: 'unit-card__title', text: u.title }),
+          el('p', { class: 'unit-card__count' }, [
+            UI.num(total), document.createTextNode(' ' + S.hub.stations)
+          ]),
+          el('p', { class: 'unit-card__desc', text: u.lead }),
+          /* כל מספר מבודד בנפרד. מספר אחד שעוטף גם את המילה "מתוך"
+             היה נקרא הפוך בתוך פסקה בעברית. */
+          el('p', { class: 'unit-card__done' }, [
+            UI.num(done),
+            document.createTextNode(' מתוך '),
+            UI.num(total),
+            document.createTextNode(' ' + S.hub.stationsDone)
+          ]),
+          dots(done, total),
+          cta
+        ])
       ]);
-      return card;
     });
 
-    /* ---------- כרטיסים נוספים ---------- */
+    /* ---------- שלוש הכניסות הנוספות ---------- */
+    function extra(href, glyph, title, desc, variant) {
+      return el('a', { class: 'mini-card', href: href }, [
+        el('div', { class: 'mini-card__glyph', 'aria-hidden': 'true', text: glyph }),
+        el('h3', { class: 'mini-card__title', text: title }),
+        el('p', { class: 'mini-card__desc', text: desc }),
+        el('span', {
+          class: 'btn btn--ghost mini-card__btn' + (variant ? ' mini-card__btn--' + variant : ''),
+          'aria-hidden': 'true', text: S.actions.open
+        })
+      ]);
+    }
+
     var extras = [
-      el('a', { class: 'card card--gold', href: '#/toolbox' }, [
-        el('div', { class: 'card__icon', 'aria-hidden': 'true', text: '🧰' }),
-        el('h3', { class: 'card__title', text: S.nav.toolbox }),
-        el('p',  { class: 'card__desc',
-          text: 'מודל תלת־ממדי חופשי, פריסות וכרטיס הנוסחה. פתוח תמיד, גם באמצע פעילות.' }),
-        el('span', { class: 'btn btn--gold btn--block', 'aria-hidden': 'true', text: S.actions.open })
-      ]),
-      el('a', { class: 'card card--gold', href: '#/progress' }, [
-        el('div', { class: 'card__icon', 'aria-hidden': 'true', text: '⭐' }),
-        el('h3', { class: 'card__title', text: S.nav.progress }),
-        el('p',  { class: 'card__desc', text: 'כל מה שהשלמתם, במקום אחד.' }),
-        el('span', { class: 'btn btn--ghost btn--block', 'aria-hidden': 'true', text: S.actions.open })
-      ]),
-      el('a', { class: 'card card--gold', href: '#/final' }, [
-        el('div', { class: 'card__icon', 'aria-hidden': 'true', text: D.finalExam.icon }),
-        el('h3', { class: 'card__title', text: D.finalExam.title }),
-        el('p',  { class: 'card__desc', text: D.finalExam.desc }),
-        el('span', { class: 'btn btn--ghost btn--block', 'aria-hidden': 'true', text: S.actions.open })
-      ])
+      extra('#/toolbox', '🧰', S.nav.toolbox,
+        'דפי עזר, מודל תלת־ממדי, פריסות וכרטיס הנוסחה. פתוח תמיד, גם באמצע תחנה.', 'unit-1'),
+      extra('#/progress', '⭐', S.nav.progress,
+        'עקבו אחרי ההישגים שלכם ותראו כמה כבר התקדמתם במסע.', 'gold'),
+      extra('#/final', D.finalExam.icon, D.finalExam.title,
+        D.finalExam.desc, 'unit-2')
     ];
 
     UI.clear(mount);
-    mount.appendChild(el('div', { class: 'page' }, [
+    mount.appendChild(el('div', { class: 'page page--hub' }, [
       hero,
-      el('div', { class: 'section-head' }, [
+      el('div', { class: 'section-head section-head--ornate' }, [
         el('h2', { text: S.hub.unitsHeading }),
         el('span', { class: 'section-head__note', text: S.hub.unitsNote })
       ]),
-      el('div', { class: 'card-grid' }, unitCards),
-      el('div', { class: 'section-head' }, [ el('h2', { text: S.hub.extrasHeading }) ]),
-      el('div', { class: 'card-grid' }, extras)
+      el('div', { class: 'unit-grid' }, unitCards),
+      el('div', { class: 'section-head' }, [el('h2', { text: S.hub.extrasHeading })]),
+      el('div', { class: 'mini-grid' }, extras),
+      el('p', { class: 'sand-band', text: S.hub.quote })
     ]));
+
+    /* ------------------------------------------------------------
+       הכפתור המרכזי של דף הבית: היחידה שבה התלמיד באמצע. אם שתיהן
+       הושלמו, או ששתיהן טרם התחילו, הסימון עובר ליחידה הראשונה
+       שעדיין לא הושלמה. כפתור אחד בלבד, לעולם לא יותר.
+       ------------------------------------------------------------ */
+    var pick = null;
+    for (var i = 0; i < units.length; i++) {
+      var doneN = Store.countDone(units[i].activities);
+      if (doneN > 0 && doneN < units[i].activities.length) { pick = i; break; }
+    }
+    if (pick === null) {
+      for (var j = 0; j < units.length; j++) {
+        if (Store.countDone(units[j].activities) < units[j].activities.length) { pick = j; break; }
+      }
+    }
+    if (pick !== null) {
+      App.cta(unitCards[pick].querySelector('.btn'));
+    } else {
+      App.cta(mount.querySelector('.mini-card:last-child .btn'));
+    }
 
     App.setTitle(S.site.title);
     App.setNavCurrent('home');

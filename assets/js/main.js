@@ -13,6 +13,23 @@
     doc.title = pageTitle && pageTitle !== site ? (pageTitle + ' · ' + site) : site;
   };
 
+  /* ------------------------------------------------------------
+     הכפתור המרכזי של המסך
+     ------------------------------------------------------------
+     בכל מסך יש בדיוק כפתור זוהר אחד, זה שאומר "זה הצעד הבא שלי".
+     אם כמה כפתורים יזהרו, הסימן יאבד את משמעותו, ולכן הסימון נשלט
+     מכאן ולא מתוך כל מסך בנפרד: כל קריאה מכבה את הקודם.
+     ------------------------------------------------------------ */
+  App.cta = function (node) {
+    var prev = doc.querySelectorAll('.btn--cta');
+    for (var i = 0; i < prev.length; i++) prev[i].classList.remove('btn--cta');
+    if (node && node.classList) node.classList.add('btn--cta');
+    return node;
+  };
+
+  /** מכבה את הזוהר בלי לסמן כפתור אחר */
+  App.clearCta = function () { App.cta(null); };
+
   /* ---------- סימון פריט הניווט הפעיל ---------- */
   App.setNavCurrent = function (key) {
     var links = doc.querySelectorAll('.site-nav .nav-btn');
@@ -28,30 +45,38 @@
   /* ---------- בניית הכותרת העליונה ---------- */
   function buildHeader() {
     var UI = App.UI, el = UI.el;
-    var S = global.PyramidData.strings;
+    var D = global.PyramidData, S = D.strings;
 
     var brand = el('a', { class: 'brand', href: '#/' }, [
       App.icons.brand('brand__mark'),
       el('span', { class: 'brand__text' }, [
         el('span', { class: 'brand__title', text: S.site.title }),
-        el('span', { class: 'brand__sub', text: S.site.meta })
+        el('span', { class: 'brand__sub', text: S.site.tagline })
       ])
     ]);
 
+    function pill(href, key, glyph, label) {
+      return el('a', { class: 'nav-btn', href: href, 'data-nav': key }, [
+        el('span', { class: 'nav-btn__glyph', 'aria-hidden': 'true', text: glyph }),
+        el('span', { class: 'nav-btn__label', text: label })
+      ]);
+    }
+
     var nav = el('nav', { class: 'site-nav', 'aria-label': 'ניווט ראשי' }, [
-      el('a', { class: 'nav-btn', href: '#/', 'data-nav': 'home' }, [
-        el('span', { 'aria-hidden': 'true', text: '🏠' }), document.createTextNode(' ' + S.nav.home)
-      ]),
-      el('a', { class: 'nav-btn', href: '#/toolbox', 'data-nav': 'toolbox' }, [
-        el('span', { 'aria-hidden': 'true', text: '🧰' }), document.createTextNode(' ' + S.nav.toolbox)
-      ]),
-      el('a', { class: 'nav-btn', href: '#/progress', 'data-nav': 'progress' }, [
-        el('span', { 'aria-hidden': 'true', text: '⭐' }), document.createTextNode(' ' + S.nav.progress)
-      ])
+      pill('#/', 'home', '🏠', S.nav.home),
+      pill('#/final', 'final', '🏆', D.finalExam.title),
+      pill('#/toolbox', 'toolbox', '🧰', S.nav.toolbox),
+      pill('#/progress', 'progress', '⭐', S.nav.progress)
+    ]);
+
+    /* ברכה בלבד. אין כאן שם, אין הרשמה ואין שמירה של שום פרט אישי. */
+    var hello = el('p', { class: 'site-hello' }, [
+      el('span', { class: 'site-hello__mark', 'aria-hidden': 'true', text: '👋' }),
+      el('span', { text: S.site.greeting })
     ]);
 
     doc.getElementById('site-header').appendChild(
-      el('div', { class: 'site-header__inner' }, [brand, nav])
+      el('div', { class: 'site-header__inner' }, [brand, nav, hello])
     );
   }
 
@@ -65,6 +90,23 @@
         el('p', { text: S.footer.line2 })
       ])
     );
+  }
+
+  /* ------------------------------------------------------------
+     שבב המצב בראש עמוד הפעילות
+     ------------------------------------------------------------
+     מאזין אחד לכל האתר, שנרשם פעם אחת באתחול. רישום מאזין בכל
+     כניסה לעמוד פעילות היה מצטבר בלי סוף.
+     ------------------------------------------------------------ */
+  function watchActivityState() {
+    App.Store.onChange(function (reason) {
+      if (String(reason).indexOf('activity:') !== 0) return;
+      var id = String(reason).slice('activity:'.length);
+      var slot = doc.querySelector('.unit-banner__state[data-state-for="' + id + '"]');
+      if (!slot) return;
+      App.UI.clear(slot);
+      slot.appendChild(App.UI.stateChip(App.Store.getActivity(id).state));
+    });
   }
 
   /* ---------- מסלולים ---------- */
@@ -102,6 +144,7 @@
     App.Store.init();
     buildHeader();
     buildFooter();
+    watchActivityState();
 
     var mount = doc.getElementById('app');
     buildRoutes(mount);

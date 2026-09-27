@@ -54,6 +54,36 @@
       ]);
     }));
 
+    /* ------------------------------------------------------------
+       הצעד הבא ביחידה: התחנה הראשונה שעדיין לא הושלמה. אם הכול
+       הושלם, הכפתור מוביל הלאה במסע. כל התחנות פתוחות בכל מקרה,
+       והכפתור הזה הוא הצעה בלבד ולא מסלול מחייב.
+       ------------------------------------------------------------ */
+    var nextAct = null;
+    for (var n = 0; n < unit.activities.length; n++) {
+      if (Store.getActivity(unit.activities[n].id).state !== 'done') {
+        nextAct = unit.activities[n]; break;
+      }
+    }
+
+    var onward = nextAct
+      ? el('a', { class: 'btn btn--unit-' + unit.id + ' btn--lg unit-onward',
+                  href: '#/activity/' + nextAct.id }, [
+          el('span', { class: 'btn__stack' }, [
+            el('span', { class: 'btn__label',
+              text: done > 0 ? 'המשיכו לתחנה' : 'התחילו את היחידה' }),
+            el('span', { class: 'btn__sub', text: nextAct.title })
+          ]),
+          el('span', { 'aria-hidden': 'true', text: '←' })
+        ])
+      : el('a', { class: 'btn btn--gold btn--lg unit-onward', href: '#/final' }, [
+          el('span', { class: 'btn__stack' }, [
+            el('span', { class: 'btn__label', text: 'למבחן הסיום' }),
+            el('span', { class: 'btn__sub', text: 'סיימתם את כל התחנות ביחידה' })
+          ]),
+          el('span', { 'aria-hidden': 'true', text: '←' })
+        ]);
+
     UI.clear(mount);
     mount.appendChild(el('div', { class: 'page' }, [
       el('div', { class: 'btn-row', style: 'margin-block-end:var(--sp-4)' }, [
@@ -64,7 +94,7 @@
       ]),
       banner,
       el('div', { class: 'section-head' }, [
-        el('h2', { text: 'הפעילויות ביחידה' }),
+        el('h2', { text: 'התחנות ביחידה' }),
         el('span', { class: 'section-head__note' }, [
           document.createTextNode('הושלמו '),
           UI.num(done),
@@ -72,8 +102,11 @@
           UI.num(unit.activities.length)
         ])
       ]),
+      el('div', { class: 'unit-onward-row' }, [onward]),
       list
     ]));
+
+    App.cta(onward);
 
     App.setTitle(unit.short + ': ' + unit.title);
     App.setNavCurrent(null);

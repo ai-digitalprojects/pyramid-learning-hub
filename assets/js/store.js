@@ -21,7 +21,12 @@
       version: SCHEMA_VERSION,
       createdAt: new Date().toISOString(),
       activities: {},                       // { "1.4": {state, score, max, firstAttempt, attempts, updatedAt} }
-      flags: { videoQuestionPassed: false },
+      flags: {
+        videoQuestionPassed: false,
+        /* אילו יחידות כבר קיבלו את מסך הסיום החגיגי. נשמר כדי שהחגיגה
+           תופיע פעם אחת בלבד, ולא שוב בכל רענון של הדף. */
+        unitsCelebrated: {}
+      },
       final: { best: null, last: null, attempts: 0, passed: false, takenAt: null },
       badge: { earned: false, earnedAt: null }
     };
@@ -228,6 +233,20 @@
         if (rec && rec.state === 'done') done++;
       }
       return Math.round((done / activities.length) * 100);
+    },
+
+    /* ---------- מסך הסיום החגיגי של יחידה ---------- */
+    unitCelebrated: function (unitId) {
+      var f = load().flags.unitsCelebrated || {};
+      return !!f[unitId];
+    },
+
+    markUnitCelebrated: function (unitId) {
+      var data = load();
+      if (!data.flags.unitsCelebrated) data.flags.unitsCelebrated = {};
+      data.flags.unitsCelebrated[unitId] = new Date().toISOString();
+      save();
+      notify('unit:celebrated');
     },
 
     countDone: function (activities) {

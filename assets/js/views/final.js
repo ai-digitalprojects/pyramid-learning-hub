@@ -53,7 +53,7 @@
         blocks.push(el('p', { class: 'result-best' }, [
           document.createTextNode('ניגשתם כבר '), UI.num(data.attempts),
           document.createTextNode(' פעמים. התוצאה הטובה ביותר: '),
-          UI.num(data.best.score + ' מתוך ' + data.best.max)
+          UI.num(data.best.score), document.createTextNode(' מתוך '), UI.num(data.best.max)
         ]));
       }
 
@@ -66,20 +66,25 @@
         ]));
       }
 
+      var startBtn = el('button', {
+        type: 'button', class: 'btn btn--gold btn--lg',
+        onclick: function () {
+          state.order = makeOrder(); state.i = 0; state.answers = [];
+          state.step = 'exam'; render();
+        }
+      }, [
+        document.createTextNode((data.attempts > 0 ? EX.messages.retake : 'מתחילים את המבחן') + ' '),
+        el('span', { 'aria-hidden': 'true', text: '←' })
+      ]);
+
       blocks.push(el('div', { class: 'btn-row btn-row--center' }, [
-        el('button', {
-          type: 'button', class: 'btn btn--gold btn--lg',
-          onclick: function () {
-            state.order = makeOrder(); state.i = 0; state.answers = [];
-            state.step = 'exam'; render();
-          }
-        }, [
-          document.createTextNode((data.attempts > 0 ? EX.messages.retake : 'מתחילים את המבחן') + ' '),
-          el('span', { 'aria-hidden': 'true', text: '←' })
-        ]),
+        startBtn,
         el('a', { class: 'btn btn--ghost btn--lg', href: '#/' },
           [document.createTextNode(EX.messages.backHome)])
       ]));
+
+      /* כפתור הפתיחה של המבחן הוא הצעד הבא במסך הזה */
+      App.cta(startBtn);
 
       if (Store.all().badge.earned) {
         blocks.push(el('div', { class: 'btn-row btn-row--center' }, [
@@ -329,7 +334,7 @@
           ]),
           best ? el('p', { class: 'cert__score' }, [
             document.createTextNode('תוצאת המבחן: '),
-            UI.num(best.score + ' מתוך ' + best.max)
+            UI.num(best.score), document.createTextNode(' מתוך '), UI.num(best.max)
           ]) : null
         ]),
         el('div', { class: 'btn-row btn-row--center no-print' }, [

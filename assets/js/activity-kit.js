@@ -415,6 +415,20 @@
     };
   };
 
+  /* ------------------------------------------------------------
+     סימון הצעד הבא במסך שנבנה ביד
+     ------------------------------------------------------------
+     מקבל את אזור התוכן ומסמן בו את הכפתור הראשון שתואם לבורר. כך גם
+     הפעילויות שנכתבו בנפרד מצייתות לאותו כלל: כפתור זוהר אחד בלבד,
+     ורק כשיש באמת צעד הבא.
+     ------------------------------------------------------------ */
+  function markNext(root, selector) {
+    if (!root) { App.clearCta(); return null; }
+    var node = root.querySelector(selector || '.btn--lg');
+    if (node) App.cta(node); else App.clearCta();
+    return node;
+  }
+
   /* ============================================================
      מסך סיכום משותף — לכל הפעילויות, גם המותאמות אישית
      opts = { mount, act, unit, score, max, result, concepts[], onRetry }
@@ -483,7 +497,7 @@
       blocks.push(el('p', { class: 'result-best' }, [
         document.createTextNode('ניסיון מספר '), UI.num(rec.attempts),
         document.createTextNode('. התוצאה הטובה ביותר שלכם: '),
-        UI.num(rec.best + ' מתוך ' + rec.max)
+        UI.num(rec.best), document.createTextNode(' מתוך '), UI.num(rec.max)
       ]));
     }
 
@@ -536,8 +550,32 @@
       el('div', { class: 'btn-row btn-row--center' }, secondary)
     ]));
 
+    /* ------------------------------------------------------------
+       השלמת יחידה
+       ------------------------------------------------------------
+       אם התחנה הזאת היא שסגרה את היחידה, מסך הסיום החגיגי נפתח מעל
+       הסיכום הרגיל. הוא מופיע פעם אחת בלבד: הסימון נשמר, ולכן רענון
+       או כניסה חוזרת לא יריצו אותו שוב.
+       ------------------------------------------------------------ */
+    var celebration = null;
+    if (Store.countDone(opts.unit.activities) === opts.unit.activities.length &&
+        !Store.unitCelebrated(opts.unit.id)) {
+      Store.markUnitCelebrated(opts.unit.id);
+      Store.flushNow();
+      celebration = App.Celebrate.unitScreen(opts.unit, {
+        href: nb.next ? '#/activity/' + nb.next.act.id : '#/final',
+        label: nb.next ? 'ממשיכים במסע' : 'למבחן הסיום'
+      });
+    }
+
     UI.clear(opts.mount);
-    opts.mount.appendChild(el('div', { class: 'stack' }, blocks));
+    var page = el('div', { class: 'stack' }, blocks);
+    if (celebration) opts.mount.appendChild(celebration);
+    opts.mount.appendChild(page);
+
+    /* כפתור אחד זוהר במסך: אם יש חגיגה, הוא שלה. */
+    App.cta(celebration ? celebration.querySelector('.btn') : primary);
+
     UI.announce('סיימתם את הפעילות. התוצאה: ' + score + ' מתוך ' + max);
     UI.scrollTop();
     return rec;
@@ -570,20 +608,24 @@
         blocks.push(el('ul', {}, cfg.intro.bullets.map(function (b) { return el('li', { text: b }); })));
       }
 
+      var startBtn = el('button', {
+        type: 'button', class: 'btn btn--unit-' + unit.id + ' btn--lg',
+        onclick: function () { state.step = 'quiz'; render(); }
+      }, [
+        document.createTextNode((cfg.intro.startLabel || 'מתחילים') + ' '),
+        el('span', { 'aria-hidden': 'true', text: '←' })
+      ]);
+
       UI.clear(mount);
       mount.appendChild(el('div', { class: 'stack' }, [
         el('div', { class: 'panel' }, blocks),
-        el('div', { class: 'btn-row btn-row--center' }, [
-          el('button', {
-            type: 'button', class: 'btn btn--unit-' + unit.id + ' btn--lg',
-            onclick: function () { state.step = 'quiz'; render(); }
-          }, [
-            document.createTextNode((cfg.intro.startLabel || 'מתחילים') + ' '),
-            el('span', { 'aria-hidden': 'true', text: '←' })
-          ])
-        ])
+        el('div', { class: 'btn-row btn-row--center' }, [startBtn])
       ]));
+
+      App.cta(startBtn);
     }
+
+    /* בזמן ששאלה פתוחה ועדיין לא נענתה, אין באתר צעד הבא לסמן */
 
     /* ---------- כותרת התקדמות ---------- */
     function progressHead() {
@@ -656,7 +698,11 @@
             el('span', { 'aria-hidden': 'true', text: '←' })
           ]);
           tail = [el('div', { class: 'btn-row btn-row--center' }, [nextBtn])];
+          /* עכשיו, ורק עכשיו, יש צעד הבא ברור */
+          global.setTimeout(function () { App.cta(nextBtn); }, 0);
         } else {
+          /* תשובה שגויה: אין צעד הבא, ולכן אין כפתור זוהר */
+          App.clearCta();
           tail = [el('p', { class: 'feedback__retry',
             text: retryText || 'נסו שוב. אפשר לבחור תשובה אחרת.' })];
         }
@@ -923,6 +969,7 @@
   }
 
   App.Kit = {
+    markNext: markNext,
     sequence: sequence,
     neighbours: neighbours,
     activityNav: activityNav,

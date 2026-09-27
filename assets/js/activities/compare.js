@@ -99,6 +99,9 @@
           ])
         ])
       ]));
+      /* הכפתור שממשיך הלאה במסך הזה */
+      App.Kit.markNext(mount, '.btn--lg');
+
     }
 
     function render() {

@@ -101,6 +101,8 @@
           el('span', { 'aria-hidden': 'true', text: '←' })
         ]);
         gateWrap.appendChild(btn);
+        /* השער נפתח, וזה הצעד הבא במסך */
+        App.cta(btn);
         btn.focus();
       }
 
@@ -126,6 +128,9 @@
         feedback,
         gateWrap
       ]));
+      /* הכפתור שממשיך הלאה במסך הזה */
+      App.Kit.markNext(mount, '.btn--lg');
+
     }
 
     render();

@@ -1,0 +1,465 @@
+/* ============================================================
+   home.css — דף הבית: נוף הכותרת, כרטיסי המסע ופס החול
+   ------------------------------------------------------------
+   הצבעים כולם מגיעים מ-tokens.css. כאן נקבע רק המבנה.
+   ============================================================ */
+
+/* ---------- ברכה בכותרת העליונה ---------- */
+.site-hello {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, .07);
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: #DCE3EE;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+
+.nav-btn__glyph { font-size: 1.05em; }
+
+/* במסך צר הברכה יורדת לשורה משלה ולא דוחקת את הניווט */
+@media (max-width: 860px) {
+  .site-hello { order: 3; flex-basis: 100%; justify-content: center; }
+}
+
+/* ============================================================
+   הכותרת הגדולה: נוף מדבר מצויר, וטקסט אמיתי מעליו
+   ============================================================ */
+.hero {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-block-end: var(--sp-6);
+  box-shadow: var(--sh-2);
+  min-block-size: 300px;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-7) var(--sp-5);
+}
+
+.hero .scene {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  z-index: -2;
+}
+
+/* שכבת כהות עדינה, כדי שהכותרת תישאר קריאה מעל הציור */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 55% at 50% 52%, rgba(12, 21, 38, .52), rgba(12, 21, 38, 0) 72%),
+    linear-gradient(180deg,
+      rgba(12, 21, 38, .04) 0%,
+      rgba(12, 21, 38, .22) 70%,
+      rgba(12, 21, 38, .34) 100%);
+}
+
+.hero__body { text-align: center; max-inline-size: 30ch; }
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, var(--fs-3xl));
+  line-height: 1.1;
+  margin: 0;
+  color: var(--gold);
+  text-shadow: 0 2px 0 var(--gold-deep), 0 6px 18px rgba(0, 0, 0, .45);
+}
+
+.hero__sub {
+  margin-block: var(--sp-3) 0;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: #FFF7E6;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+}
+
+.hero__meta {
+  margin-block: var(--sp-2) 0;
+  font-size: var(--fs-sm);
+  color: #E4E9F1;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .6);
+}
+
+/* פתק הפפירוס עם משפט העידוד */
+.hero__note {
+  position: absolute;
+  inset-block-start: var(--sp-4);
+  inset-inline-start: var(--sp-4);
+  max-inline-size: 16ch;
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--papyrus);
+  color: #6B4A15;
+  border: 2px solid var(--papyrus-line);
+  border-radius: 4px 14px 6px 12px;
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  line-height: 1.35;
+  transform: rotate(-3deg);
+  box-shadow: var(--sh-2);
+}
+
+@media (max-width: 720px) {
+  .hero__note { position: static; transform: none; max-inline-size: none; margin-block-start: var(--sp-5); }
+  .hero { padding-block: var(--sp-6); }
+}
+
+/* ============================================================
+   כותרת מקטע עם קו קישוט
+   ============================================================ */
+.section-head--ornate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-2);
+}
+
+.section-head--ornate h2 {
+  position: relative;
+  display: inline-block;
+  padding-inline: var(--sp-6);
+}
+
+.section-head--ornate h2::before,
+.section-head--ornate h2::after {
+  content: "◆";
+  position: absolute;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: .7em;
+}
+.section-head--ornate h2::before { inset-inline-start: 0; }
+.section-head--ornate h2::after  { inset-inline-end: 0; }
+
+/* ============================================================
+   כרטיסי היחידות
+   ============================================================ */
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--sp-5);
+  margin-block-end: var(--sp-7);
+}
+
+.unit-card {
+  position: relative;
+  display: block;
+  padding: var(--sp-6) var(--sp-5) var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--sh-1);
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.unit-card:hover { transform: translateY(-3px); box-shadow: var(--sh-3); }
+
+/* פס הצבע של היחידה בראש הכרטיס */
+.unit-card::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 6px;
+  border-start-start-radius: var(--r-lg);
+  border-start-end-radius: var(--r-lg);
+}
+.unit-card--1::before { background: var(--unit-1); }
+.unit-card--2::before { background: var(--unit-2); }
+
+.unit-card--1 { background: linear-gradient(180deg, var(--unit-1-wash), var(--surface) 62%); }
+.unit-card--2 { background: linear-gradient(180deg, var(--unit-2-wash), var(--surface) 62%); }
+
+/* עיגול מספר היחידה */
+.unit-card__badge {
+  position: absolute;
+  inset-block-start: var(--sp-4);
+  inset-inline-end: var(--sp-4);
+  inline-size: 62px;
+  block-size: 62px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: #fff;
+  line-height: 1.05;
+  box-shadow: var(--sh-2);
+}
+.unit-card--1 .unit-card__badge { background: var(--unit-1); }
+.unit-card--2 .unit-card__badge { background: var(--unit-2); }
+
+.unit-card__badge-word { display: block; font-size: 11px; font-weight: 500; }
+.unit-card__badge-num  { display: block; font-size: 22px; font-weight: 700; font-family: var(--font-display); }
+
+.unit-card__body { padding-inline-end: 74px; }
+
+.unit-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  line-height: 1.15;
+}
+.unit-card--1 .unit-card__title { color: var(--unit-1-deep); }
+.unit-card--2 .unit-card__title { color: var(--unit-2-deep); }
+
+.unit-card__count {
+  margin-block: var(--sp-1) var(--sp-3);
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.unit-card__desc {
+  margin: 0;
+  color: var(--text);
+  line-height: var(--lh-body);
+  /* הטקסט יוצא מתחת לעיגול אחרי שתי שורות */
+  padding-inline-end: 0;
+}
+
+.unit-card__body > .unit-card__desc { padding-inline-end: 0; }
+
+.unit-card__done {
+  margin-block: var(--sp-4) var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* ---------- נקודות ההתקדמות ---------- */
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-block-end: var(--sp-4);
+}
+
+.dots__dot {
+  inline-size: 13px;
+  block-size: 13px;
+  border-radius: 50%;
+  background: var(--line);
+  border: 1px solid var(--line-strong);
+}
+
+.unit-card--1 .dots__dot--on { background: var(--unit-1); border-color: var(--unit-1-deep); }
+.unit-card--2 .dots__dot--on { background: var(--unit-2); border-color: var(--unit-2-deep); }
+
+@media (max-width: 560px) {
+  .unit-card__badge { inline-size: 52px; block-size: 52px; }
+  .unit-card__body  { padding-inline-end: 62px; }
+  .unit-card__badge-num { font-size: 19px; }
+}
+
+/* ============================================================
+   שלוש הכניסות הנוספות
+   ============================================================ */
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--sp-4);
+  margin-block-end: var(--sp-6);
+}
+
+.mini-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-2);
+  padding: var(--sp-5) var(--sp-4);
+  border-radius: var(--r-md);
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--sh-1);
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.mini-card:hover { transform: translateY(-3px); box-shadow: var(--sh-2); }
+
+.mini-card__glyph { font-size: 2.4rem; line-height: 1; }
+
+.mini-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+}
+
+.mini-card__desc {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: var(--lh-body);
+  flex: 1 1 auto;
+}
+
+.mini-card__btn { margin-block-start: var(--sp-2); min-inline-size: 120px; }
+
+.mini-card__btn--unit-1 { color: var(--unit-1-deep); border-color: var(--unit-1); }
+.mini-card__btn--unit-2 { color: var(--unit-2-deep); border-color: var(--unit-2); }
+.mini-card__btn--gold   { color: var(--gold-deep);   border-color: var(--gold); }
+
+/* ============================================================
+   פס החול עם משפט הסיום
+   ============================================================ */
+.sand-band {
+  margin: 0;
+  padding: var(--sp-5) var(--sp-4);
+  text-align: center;
+  border-radius: var(--r-md);
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0 58px,
+      rgba(169, 124, 67, .16) 58px 60px),
+    linear-gradient(180deg, var(--dune-far), var(--dune-near));
+  color: #5A3E16;
+  font-weight: 700;
+  font-size: var(--fs-md);
+  border: 2px solid var(--stone-shade);
+}
+
+/* ============================================================
+   מסך הסיום של יחידה
+   ============================================================ */
+.celebrate {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: var(--sp-6) var(--sp-5) var(--sp-5);
+  margin-block: var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 2px solid var(--gold);
+  background: linear-gradient(180deg, var(--gold-wash), var(--surface) 70%);
+  box-shadow: var(--sh-2);
+}
+
+.celebrate__pyramid {
+  inline-size: min(300px, 100%);
+  block-size: auto;
+  display: block;
+  margin-inline: auto;
+}
+
+/* כל נדבך עולה למקומו מלמטה */
+.celebrate__layer {
+  opacity: 0;
+  transform: translateY(14px);
+  transform-origin: center bottom;
+  animation: cel-layer .42s var(--ease) forwards;
+}
+
+@keyframes cel-layer {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.celebrate__cap {
+  opacity: 0;
+  animation: cel-cap .5s var(--ease) forwards;
+}
+
+@keyframes cel-cap {
+  0%   { opacity: 0; }
+  60%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* הפסגה נדלקת ואז נושמת בשקט */
+.celebrate__halo {
+  opacity: 0;
+  animation: cel-halo .7s var(--ease) forwards, cel-breathe 2.6s var(--ease) 1.4s infinite;
+}
+
+@keyframes cel-halo { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cel-breathe {
+  0%, 100% { opacity: .75; }
+  50%      { opacity: 1; }
+}
+
+.celebrate__title {
+  margin-block: var(--sp-4) 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  color: var(--gold-deep);
+}
+
+.celebrate__unit {
+  margin-block: var(--sp-2) 0;
+  font-weight: 700;
+  font-size: var(--fs-md);
+}
+
+.celebrate__note {
+  margin-block: var(--sp-2) var(--sp-5);
+  color: var(--text-muted);
+}
+
+.celebrate__btn { min-inline-size: 240px; }
+
+/* ---------- קונפטי ---------- */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti__bit {
+  position: absolute;
+  inset-block-start: -14px;
+  inline-size: 9px;
+  block-size: 14px;
+  border-radius: 2px;
+  animation: cel-fall 2.4s var(--ease) forwards;
+}
+
+@keyframes cel-fall {
+  0%   { transform: translateY(0)    rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(420px) rotate(420deg); opacity: 0; }
+}
+
+/* ---------- ללא תנועה ---------- */
+.celebrate--still .celebrate__layer,
+.celebrate--still .celebrate__cap,
+.celebrate--still .celebrate__halo {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .celebrate__layer,
+  .celebrate__cap,
+  .celebrate__halo,
+  .confetti__bit {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .confetti { display: none; }
+}
+
+/* כפתור ההמשך בראש עמוד היחידה */
+.unit-onward-row {
+  display: flex;
+  justify-content: center;
+  margin-block-end: var(--sp-5);
+}
+
+.unit-onward { min-inline-size: min(360px, 100%); }

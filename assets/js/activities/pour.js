@@ -36,6 +36,14 @@
             this.classList.add('answer-btn--correct');
             this.querySelector('.answer-btn__mark').textContent = '✓';
 
+            var toExperiment = el('button', {
+              type: 'button', class: 'btn btn--unit-2 btn--lg',
+              onclick: function () { state.step = 'experiment'; render(); }
+            }, [
+              document.createTextNode('בודקים בפועל '),
+              el('span', { 'aria-hidden': 'true', text: '←' })
+            ]);
+
             UI.clear(feedback);
             feedback.appendChild(el('div', { class: 'feedback feedback--ok' }, [
               el('div', { class: 'feedback__head' }, [
@@ -43,16 +51,10 @@
                 el('h3', { class: 'feedback__title', text: 'ההשערה נרשמה' })
               ]),
               el('p', { class: 'feedback__why', text: p.afterText }),
-              el('div', { class: 'btn-row btn-row--center' }, [
-                el('button', {
-                  type: 'button', class: 'btn btn--unit-2 btn--lg',
-                  onclick: function () { state.step = 'experiment'; render(); }
-                }, [
-                  document.createTextNode('בודקים בפועל '),
-                  el('span', { 'aria-hidden': 'true', text: '←' })
-                ])
-              ])
+              el('div', { class: 'btn-row btn-row--center' }, [toExperiment])
             ]));
+            /* ההשערה נרשמה, והצעד הבא הוא הניסוי עצמו */
+            App.cta(toExperiment);
             UI.announce(p.afterText);
           }
         }, [
@@ -83,6 +85,9 @@
         options,
         feedback
       ]));
+      /* הכפתור שממשיך הלאה במסך הזה */
+      App.Kit.markNext(mount, '.btn--lg');
+
     }
 
     /* ---------- שלב 2: הניסוי ---------- */
@@ -110,6 +115,14 @@
         pourBtn.disabled = true;
         pourBtn.setAttribute('aria-disabled', 'true');
 
+        var toQuiz = el('button', {
+          type: 'button', class: 'btn btn--unit-2 btn--lg',
+          onclick: function () { state.step = 'quiz'; render(); }
+        }, [
+          document.createTextNode('לשאלות '),
+          el('span', { 'aria-hidden': 'true', text: '←' })
+        ]);
+
         UI.clear(nextWrap);
         nextWrap.appendChild(el('div', { class: 'feedback feedback--ok', style: 'inline-size:100%' }, [
           el('div', { class: 'feedback__head' }, [
@@ -119,16 +132,10 @@
           ]),
           el('p', { class: 'feedback__why',
             text: 'מילאנו את הפירמידה שלוש פעמים ושפכנו למנסרה, והיא התמלאה בדיוק. מכאן שנפח הפירמידה הוא שליש מנפח המנסרה, וזו הסיבה שבנוסחה מחלקים ב-3.' }),
-          el('div', { class: 'btn-row btn-row--center' }, [
-            el('button', {
-              type: 'button', class: 'btn btn--unit-2 btn--lg',
-              onclick: function () { state.step = 'quiz'; render(); }
-            }, [
-              document.createTextNode('לשאלות '),
-              el('span', { 'aria-hidden': 'true', text: '←' })
-            ])
-          ])
+          el('div', { class: 'btn-row btn-row--center' }, [toQuiz])
         ]));
+        /* המנסרה מלאה, והצעד הבא הוא המעבר לשאלות */
+        App.cta(toQuiz);
         UI.announce('המנסרה התמלאה אחרי שלוש שפיכות.');
       }
 
@@ -174,6 +181,9 @@
         el('div', { class: 'btn-row btn-row--center' }, [pourBtn]),
         nextWrap
       ]));
+
+      /* במסך הניסוי הצעד הבא הוא השפיכה עצמה */
+      App.cta(pourBtn);
     }
 
     function render() {

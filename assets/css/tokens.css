@@ -20,9 +20,24 @@
   --unit-1:         #1F8A8C;
   --unit-1-deep:    #14676A;
   --unit-1-wash:    #E6F4F4;
-  --unit-2:         #C2571E;
-  --unit-2-deep:    #9A4315;
-  --unit-2-wash:    #FBEDE4;
+  --unit-2:         #6A4FB6;
+  --unit-2-deep:    #4C3391;
+  --unit-2-wash:    #EFEBFB;
+
+  /* ---------- Colour: the desert scene ----------
+     Used only by the hero and the page bands. Every shape that uses
+     these is drawn in the project's own SVG; nothing is traced from
+     the reference image. */
+  --sky-high:       #5FB8E6;
+  --sky-low:        #BFE6F5;
+  --dune-far:       #E3C089;
+  --dune-near:      #CFA163;
+  --dune-deep:      #A97C43;
+  --stone:          #D9B67E;
+  --stone-shade:    #B8904F;
+  --palm:           #2F7D55;
+  --papyrus:        #F6E4BE;
+  --papyrus-line:   #C9A96A;
 
   /* ---------- Colour: state ---------- */
   --success:        #1E7A4B;
@@ -85,6 +100,8 @@
   --dur-1:  150ms;
   --dur-2:  250ms;
   --dur-3:  400ms;
+  /* The one call-to-action on a screen breathes on this cycle. */
+  --dur-glow: 2.3s;
 
   /* ---------- Focus ---------- */
   --focus-ring: 3px solid var(--gold);
@@ -111,9 +128,9 @@
     --unit-1:       #45B3B5;
     --unit-1-deep:  #6FD0D2;
     --unit-1-wash:  #12333480;
-    --unit-2:       #E58147;
-    --unit-2-deep:  #F2A177;
-    --unit-2-wash:  #3A210F80;
+    --unit-2:       #A98CF0;
+    --unit-2-deep:  #C6B2F8;
+    --unit-2-wash:  #241A4280;
 
     --success:      #4FBF87;
     --success-wash: #12301F80;
@@ -150,9 +167,9 @@
   --unit-1:       #45B3B5;
   --unit-1-deep:  #6FD0D2;
   --unit-1-wash:  #12333480;
-  --unit-2:       #E58147;
-  --unit-2-deep:  #F2A177;
-  --unit-2-wash:  #3A210F80;
+  --unit-2:       #A98CF0;
+  --unit-2-deep:  #C6B2F8;
+  --unit-2-wash:  #241A4280;
   --success:      #4FBF87;
   --success-wash: #12301F80;
   --warn:         #EE8A63;

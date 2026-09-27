@@ -47,7 +47,7 @@
       finalPanel = el('div', { class: 'panel' }, [
         el('h3', { text: EX.title }),
         el('p', { class: 'card__desc', text: 'עוד לא ניגשתם למבחן הסיום.' }),
-        el('a', { class: 'btn btn--gold', href: '#/final' }, [document.createTextNode('למבחן הסיום')])
+        el('a', { class: 'btn btn--gold btn--lg', href: '#/final' }, [document.createTextNode('למבחן הסיום')])
       ]);
     } else {
       var b = data.final.best;
@@ -55,7 +55,7 @@
         el('h3', { text: EX.title }),
         el('p', {}, [
           document.createTextNode('התוצאה הטובה ביותר: '),
-          UI.num(b.score + ' מתוך ' + b.max),
+          UI.num(b.score), document.createTextNode(' מתוך '), UI.num(b.max),
           document.createTextNode('  ·  ניסיונות: '),
           UI.num(data.final.attempts)
         ]),
@@ -178,6 +178,11 @@
       el('div', { style: 'margin-block-start:var(--sp-5)' }, [deviceNote]),
       actions
     ]));
+
+    /* במסך הזה הצעד הבא הוא מבחן הסיום */
+
+    App.Kit.markNext(mount, '.panel .btn--gold');
+
 
     App.setTitle(S.progress.title);
     App.setNavCurrent('progress');

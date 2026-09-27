@@ -68,17 +68,22 @@
       }
 
       function show(ok, title, text) {
+        var onward = null;
+        if (ok) {
+          onward = el('button', {
+            type: 'button', class: 'btn btn--unit-2 btn--lg', onclick: advance
+          }, [
+            document.createTextNode(
+              isLastStep ? (isLastProblem ? 'לסיכום הפעילות ' : 'לתרגיל הבא ') : 'לשלב הבא '),
+            el('span', { 'aria-hidden': 'true', text: '←' })
+          ]);
+        }
         var tail = ok
-          ? [el('div', { class: 'btn-row btn-row--center' }, [
-              el('button', {
-                type: 'button', class: 'btn btn--unit-2 btn--lg', onclick: advance
-              }, [
-                document.createTextNode(
-                  isLastStep ? (isLastProblem ? 'לסיכום הפעילות ' : 'לתרגיל הבא ') : 'לשלב הבא '),
-                el('span', { 'aria-hidden': 'true', text: '←' })
-              ])
-            ])]
+          ? [el('div', { class: 'btn-row btn-row--center' }, [onward])]
           : [el('p', { class: 'feedback__retry', text: 'נסו שוב. תקנו את המספר ולחצו בדיקה.' })];
+
+        /* עכשיו יש צעד הבא, ורק עכשיו הכפתור זוהר */
+        if (onward) App.cta(onward); else App.clearCta();
 
         UI.clear(feedback);
         feedback.appendChild(el('div', { class: 'feedback feedback--' + (ok ? 'ok' : 'no') }, [
@@ -141,6 +146,9 @@
         ]),
         feedback
       ]));
+      /* הכפתור שממשיך הלאה במסך הזה */
+      App.Kit.markNext(mount, '.btn--lg');
+
 
       UI.scrollTop();
     }
