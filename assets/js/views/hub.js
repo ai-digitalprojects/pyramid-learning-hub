@@ -32,7 +32,7 @@
         href: '#/unit/' + u.id
       }, [
         el('div', { class: 'card__icon', 'aria-hidden': 'true', text: u.icon }),
-        el('h3', { class: 'card__title', text: u.short + ' — ' + u.title }),
+        el('h3', { class: 'card__title', text: u.short + ': ' + u.title }),
         el('p',  { class: 'card__desc', text: u.lead }),
         UI.progressBar(pct, 'unit-' + u.id,
           done + ' מתוך ' + u.activities.length + ' פעילויות'),
@@ -51,7 +51,7 @@
         el('div', { class: 'card__icon', 'aria-hidden': 'true', text: '🧰' }),
         el('h3', { class: 'card__title', text: S.nav.toolbox }),
         el('p',  { class: 'card__desc',
-          text: 'מודל תלת־ממדי חופשי, פריסות וכרטיס הנוסחה — פתוח תמיד, גם באמצע פעילות.' }),
+          text: 'מודל תלת־ממדי חופשי, פריסות וכרטיס הנוסחה. פתוח תמיד, גם באמצע פעילות.' }),
         el('span', { class: 'btn btn--gold btn--block', 'aria-hidden': 'true', text: S.actions.open })
       ]),
       el('a', { class: 'card card--gold', href: '#/progress' }, [

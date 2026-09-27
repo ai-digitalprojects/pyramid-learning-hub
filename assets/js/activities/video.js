@@ -73,7 +73,7 @@
             el('h3', { class: 'feedback__title', text: ok ? 'נכון' : 'לא מדויק' })
           ]),
           el('p', { class: 'feedback__why', text: text }),
-          ok ? null : el('p', { class: 'feedback__retry', text: 'נסו שוב — בחרו אפשרות אחרת.' })
+          ok ? null : el('p', { class: 'feedback__retry', text: 'נסו שוב. בחרו אפשרות אחרת.' })
         ]));
         UI.announce((ok ? 'נכון. ' : 'לא מדויק. ') + text);
       }

@@ -105,7 +105,7 @@
     var G = global.App.Geometry;
     var nm = G.names(n);
     if (variant === 'missing-flap') {
-      return 'פריסה ובה ' + nm.base + ' ורק ' + (n - 1) + ' משולשים — חסר משולש אחד.';
+      return 'פריסה ובה ' + nm.base + ' ורק ' + (n - 1) + ' משולשים, חסר משולש אחד.';
     }
     if (variant === 'double-flap') {
       return 'פריסה ובה ' + nm.base + ' ו-' + (n + 1) + ' משולשים, כששניים מהם יוצאים מאותה צלע.';

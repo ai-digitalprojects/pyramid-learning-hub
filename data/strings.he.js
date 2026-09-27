@@ -56,7 +56,7 @@ window.PyramidData.strings = {
     tableHeadUnit:'יחידה',
     tableHeadState:'מצב',
     tableHeadScore:'ניקוד',
-    noScore:      '—',
+    noScore:      'טרם',
     deviceNote:   'ההתקדמות נשמרת במכשיר הזה ובדפדפן הזה בלבד. היא לא נשלחת לשום מקום ולא נשמרת באינטרנט.',
     storageOff:   'לא ניתן לשמור התקדמות בדפדפן הזה. אפשר להמשיך ללמוד, אבל ההתקדמות תישמר רק עד סגירת הדף.',
     resetConfirm: 'לאפס את כל ההתקדמות? הפעולה הזו לא ניתנת לביטול.',

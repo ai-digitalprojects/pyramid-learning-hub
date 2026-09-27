@@ -381,7 +381,7 @@
               chosen.splice(i, 1);
               refresh();
             }
-          }, [ document.createTextNode(v ? v.text : '—') ]));
+          }, [ document.createTextNode(v ? v.text : '') ]));
         })(i);
       }
       var check = el('button', {
@@ -497,7 +497,7 @@
         el('span', { class: 'btn__stack' }, [
           el('span', { class: 'btn__label', text: isUnitEnd ? 'ליחידה הבאה' : 'לפעילות הבאה' }),
           el('span', { class: 'btn__sub',
-            text: (isUnitEnd ? nb.next.unit.short + ' — ' : '') + nb.next.act.title })
+            text: (isUnitEnd ? nb.next.unit.short + ': ' : '') + nb.next.act.title })
         ]),
         el('span', { 'aria-hidden': 'true', text: '←' })
       ]);
@@ -657,7 +657,7 @@
           tail = [el('div', { class: 'btn-row btn-row--center' }, [nextBtn])];
         } else {
           tail = [el('p', { class: 'feedback__retry',
-            text: retryText || 'נסו שוב — אפשר לבחור תשובה אחרת.' })];
+            text: retryText || 'נסו שוב. אפשר לבחור תשובה אחרת.' })];
         }
 
         UI.clear(feedback);
@@ -725,7 +725,7 @@
                 if (Math.abs(val - q.why.checks[k].value) <= tol) { msg = q.why.checks[k].text; break; }
               }
             }
-            showFeedback(false, 'עוד לא', [para(msg)], 'נסו שוב — תקנו את המספר ולחצו בדיקה.');
+            showFeedback(false, 'עוד לא', [para(msg)], 'נסו שוב. תקנו את המספר ולחצו בדיקה.');
             control.clear();
           }
         });
@@ -744,16 +744,16 @@
             if (correct) {
               App.SolidView.lock(figSvg);
               solve();
-              showFeedback(true, (q.partNames && q.partNames[part]) ? ('נכון — ' + q.partNames[part].name) : 'נכון',
+              showFeedback(true, (q.partNames && q.partNames[part]) ? ('נכון: ' + q.partNames[part].name) : 'נכון',
                 [para(q.why.correct)].concat(q.why.note ? [note(q.why.note)] : []));
             } else {
               var info = q.partNames && q.partNames[part];
               var body = [para(info
-                ? 'בחרתם ' + info.name + ' — ' + info.desc
+                ? 'בחרתם ' + info.name + '' + info.desc
                 : 'זה אינו החלק שחיפשנו.')];
               if (q.why.wanted) body.push(note(q.why.wanted));
-              showFeedback(false, info ? ('לא זה החלק — ' + info.name) : 'לא זה החלק', body,
-                'נסו שוב — לחצו על חלק אחר.');
+              showFeedback(false, info ? ('לא זה החלק: ' + info.name) : 'לא זה החלק', body,
+                'נסו שוב. לחצו על חלק אחר.');
             }
           }
         });
@@ -787,7 +787,7 @@
             }
           } else {
             var w = (pair && pair.wrongWhy) || q.why.fallback || 'ההתאמה הזאת אינה נכונה.';
-            showFeedback(false, 'לא מתאים', [para(w)], 'נסו שוב — בחרו זוג אחר.');
+            showFeedback(false, 'לא מתאים', [para(w)], 'נסו שוב. בחרו זוג אחר.');
           }
         });
         inputHolder.appendChild(control.node);
@@ -808,16 +808,16 @@
               feedback.appendChild(el('div', { class: 'feedback feedback--ok' }, [
                 el('div', { class: 'feedback__head' }, [
                   el('span', { class: 'feedback__icon', 'aria-hidden': 'true', text: '✔' }),
-                  el('h3', { class: 'feedback__title', text: 'נכון — ' + sel.item.text })
+                  el('h3', { class: 'feedback__title', text: 'נכון: ' + sel.item.text })
                 ]),
                 para(sel.item.why || '')
               ]));
               UI.announce('נכון. המשיכו לגוף הבא.');
             }
           } else {
-            showFeedback(false, 'לא שם — ' + sel.item.text,
+            showFeedback(false, 'לא שם: ' + sel.item.text,
               [para(sel.item.whyWrong || 'הגוף הזה שייך לתא השני.')],
-              'נסו שוב — בחרו את הגוף ואז את התא הנכון.');
+              'נסו שוב. בחרו את הגוף ואז את התא הנכון.');
           }
         });
         inputHolder.appendChild(control.node);
@@ -835,7 +835,7 @@
           } else {
             showFeedback(false, 'עוד לא',
               [para(q.why.fallback || 'הסדר אינו נכון. חשבו: מה מחשבים קודם ומה בסוף.')],
-              'נסו שוב — הסירו אריחים וסדרו מחדש.');
+              'נסו שוב. הסירו אריחים וסדרו מחדש.');
             control.reset();
           }
         });

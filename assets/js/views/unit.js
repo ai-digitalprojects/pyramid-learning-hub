@@ -20,7 +20,7 @@
     var banner = el('div', { class: 'unit-banner unit-banner--' + unit.id }, [
       el('div', { class: 'unit-banner__icon', 'aria-hidden': 'true', text: unit.icon }),
       el('div', { class: 'unit-banner__body' }, [
-        el('h1', { text: unit.short + ' — ' + unit.title }),
+        el('h1', { text: unit.short + ': ' + unit.title }),
         el('p', { text: unit.lead })
       ]),
       el('div', {}, [ UI.progressRing(pct, 'unit-' + unit.id) ])
@@ -75,7 +75,7 @@
       list
     ]));
 
-    App.setTitle(unit.short + ' — ' + unit.title);
+    App.setTitle(unit.short + ': ' + unit.title);
     App.setNavCurrent(null);
   };
 

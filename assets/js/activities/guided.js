@@ -78,7 +78,7 @@
                 el('span', { 'aria-hidden': 'true', text: '←' })
               ])
             ])]
-          : [el('p', { class: 'feedback__retry', text: 'נסו שוב — תקנו את המספר ולחצו בדיקה.' })];
+          : [el('p', { class: 'feedback__retry', text: 'נסו שוב. תקנו את המספר ולחצו בדיקה.' })];
 
         UI.clear(feedback);
         feedback.appendChild(el('div', { class: 'feedback feedback--' + (ok ? 'ok' : 'no') }, [

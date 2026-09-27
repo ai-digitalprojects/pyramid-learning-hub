@@ -240,11 +240,11 @@
           el('p', { text: item.prompt }),
           el('p', { class: 'review-answer' }, [
             el('strong', { text: 'התשובה שלכם: ' }),
-            document.createTextNode(picked ? picked.text : '—')
+            document.createTextNode(picked ? picked.text : 'לא נבחרה תשובה')
           ]),
           a.correct ? null : el('p', { class: 'review-answer' }, [
             el('strong', { text: 'התשובה הנכונה: ' }),
-            document.createTextNode(right ? right.text : '—')
+            document.createTextNode(right ? right.text : 'לא זמינה')
           ]),
           el('p', { class: 'feedback__note' }, [document.createTextNode(item.why)])
         ]);

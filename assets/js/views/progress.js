@@ -110,7 +110,7 @@
               : el('span', { class: 'num', text: S.progress.noScore })
           ]),
           el('td', {}, [
-            rec.attempts ? UI.num(String(rec.attempts)) : el('span', { class: 'num', text: '—' })
+            rec.attempts ? UI.num(String(rec.attempts)) : el('span', { class: 'num', text: '0' })
           ])
         ]));
       });

@@ -54,7 +54,7 @@
         UI.clear(readout);
         if (!part) {
           readout.appendChild(el('p', { class: 'part-readout__empty',
-            text: 'לחצו על חלק כלשהו באיור — ונגלה יחד איך הוא נקרא.' }));
+            text: 'לחצו על חלק כלשהו באיור, ונגלה יחד איך הוא נקרא.' }));
           return;
         }
         var info = act.parts[part];
@@ -223,20 +223,20 @@
             if (correct) {
               solved = true;
               SV.lock(svg);
-              box(true, 'נכון — ' + got.name, [
+              box(true, 'נכון: ' + got.name, [
                 el('p', { class: 'feedback__why' }, [
                   document.createTextNode('לחצתם על '),
                   el('strong', { text: got.name }),
-                  document.createTextNode(' — ' + got.desc)
+                  document.createTextNode(': ' + got.desc)
                 ])
               ]);
               UI.announce('נכון. ' + got.name);
             } else {
-              box(false, 'לא זה החלק — ' + got.name, [
+              box(false, 'לא זה החלק: ' + got.name, [
                 el('p', { class: 'feedback__why' }, [
                   document.createTextNode('לחצתם על '),
                   el('strong', { text: got.name }),
-                  document.createTextNode(' — ' + got.desc)
+                  document.createTextNode(': ' + got.desc)
                 ]),
                 el('p', { class: 'feedback__note' }, [
                   el('strong', { text: 'התבקשתם ללחוץ על ' + want.name + ': ' }),
@@ -269,20 +269,20 @@
                 });
                 this.classList.add('answer-btn--correct');
                 this.querySelector('.answer-btn__mark').textContent = '✔';
-                box(true, 'נכון — ' + want.name, [
+                box(true, 'נכון: ' + want.name, [
                   el('p', { class: 'feedback__why' }, [
                     document.createTextNode('החלק המסומן הוא '),
                     el('strong', { text: want.name }),
-                    document.createTextNode(' — ' + want.desc)
+                    document.createTextNode(': ' + want.desc)
                   ])
                 ]);
               } else {
                 this.disabled = true; this.setAttribute('aria-disabled', 'true');
                 this.classList.add('answer-btn--wrong');
                 this.querySelector('.answer-btn__mark').textContent = '✘';
-                box(false, 'לא מדויק — ' + opt, [
+                box(false, 'לא מדויק: ' + opt, [
                   para('זה אינו החלק המסומן באיור. הסתכלו שוב על הסימון ובחרו אפשרות אחרת.')
-                ], 'נסו שוב — בחרו אפשרות אחרת.');
+                ], 'נסו שוב. בחרו אפשרות אחרת.');
               }
             }
           }, [
