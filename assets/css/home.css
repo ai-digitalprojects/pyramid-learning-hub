@@ -9,7 +9,16 @@
    שם האתר, דף הבית, שלום תלמיד/ה, התקדמות שלי, ארגז הכלים, מבחן סיום.
    אין כאן direction הפוך, אין row-reverse ואין order, ולכן הסדר על
    המסך, סדר הקריאה וסדר מקש Tab הם אותו סדר אחד בדיוק. */
-.site-header__inner { justify-content: flex-start; }
+/* שם האתר נשאר בקצה הימני והניווט נפרש אל הקצה השני, כדי שהכותרת
+   לא תיראה כקבוצה קטנה שצפה באמצע מסך רחב. הסדר עצמו אינו משתנה:
+   שם האתר, דף הבית, הברכה, התקדמות שלי, ארגז הכלים, מבחן סיום. */
+.site-header__inner { justify-content: space-between; }
+
+/* במסך רחב מאוד נותנים לפריטי הניווט מעט יותר אוויר ביניהם */
+@media (min-width: 1200px) {
+  .site-nav { gap: var(--sp-2); }
+  .nav-btn { padding-inline: var(--sp-4); }
+}
 
 
 /* ---------- ברכה בכותרת העליונה ----------
@@ -73,7 +82,9 @@
   margin-block-end: var(--sp-6);
   box-shadow: var(--sh-2);
   /* הגובה נגזר מהרוחב, ולכן הנוף נחתך במקום להימתח */
-  min-block-size: clamp(320px, 34vw, 460px);
+  /* הגובה גדל עם הרוחב, כך שביחס רחב יותר הנוף נחתך פחות.
+     object-fit: cover ממשיך לחתוך ולא למתוח. */
+  min-block-size: clamp(320px, 30vw, 560px);
   display: grid;
   place-items: center;
   padding: var(--sp-7) var(--sp-5);
@@ -195,6 +206,8 @@
   gap: var(--sp-2);
 }
 
+.section-head--ornate .section-head__note { max-inline-size: 70ch; }
+
 .section-head--ornate h2 {
   position: relative;
   display: inline-block;
@@ -218,9 +231,14 @@
    ============================================================ */
 .unit-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* שתי עמודות שוות ברוחב שולחן העבודה, עמודה אחת במסך צר */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
   gap: var(--sp-5);
   margin-block-end: var(--sp-7);
+}
+
+@media (min-width: 900px) {
+  .unit-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .unit-card {
@@ -329,6 +347,8 @@
   margin: 0;
   color: var(--text);
   line-height: var(--lh-body);
+  /* הכרטיס רחב, אבל שורת טקסט ארוכה מדי קשה לקריאה */
+  max-inline-size: 58ch;
   /* הטקסט יוצא מתחת לעיגול אחרי שתי שורות */
   padding-inline-end: 0;
 }
@@ -371,9 +391,13 @@
    ============================================================ */
 .mini-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: var(--sp-5);
   margin-block-end: var(--sp-6);
+}
+
+@media (min-width: 900px) {
+  .mini-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 .mini-card {
@@ -451,6 +475,7 @@
 
 .sand-band__text {
   margin: 0;
+  max-inline-size: 70ch;
   padding: var(--sp-5) var(--sp-5);
   text-align: center;
   color: #5A3E16;
