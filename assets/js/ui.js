@@ -15,7 +15,11 @@
         var v = attrs[k];
         if (v === null || v === undefined || v === false) return;
         if (k === 'class') node.className = v;
-        else if (k === 'text') node.textContent = v;
+        else if (k === 'text') {
+          // תגיות שאינן יכולות להכיל צאצאים מקבלות טקסט פשוט
+          if (tag === 'option' || tag === 'title' || tag === 'textarea') node.textContent = v;
+          else { node.textContent = ''; node.appendChild(math(v)); }
+        }
         else if (k === 'html') node.innerHTML = v;
         else if (k.indexOf('on') === 0 && typeof v === 'function') {
           node.addEventListener(k.slice(2).toLowerCase(), v);
@@ -36,6 +40,63 @@
   /** מספר מבודד מכיווניות, כדי שלא יתהפך בתוך טקסט עברי */
   function num(value) {
     return el('bdi', { class: 'num', text: String(value) });
+  }
+
+  /* ------------------------------------------------------------
+     תרגילי חשבון בתוך משפט בעברית
+     ------------------------------------------------------------
+     בפסקה בעברית הסימנים ×, :, = ו-+ הם תווים ניטרליים: האלגוריתם
+     הדו־כיווני נותן להם את כיוון הפסקה, ולכן תרגיל כמו 90 : 3 = 30
+     היה מוצג הפוך. תרגיל נכתב תמיד משמאל לימין.
+
+     הפונקציה מאתרת רצף שכולו ספרות, סימני פעולה וסוגריים, ועוטפת אותו
+     ב-bdi עם כיוון שמאל־לימין. מילה בעברית קוטעת את הרצף, ולכן נוסחה
+     מילולית כמו (שטח הבסיס × גובה) : 3 נשארת בכיוון הפסקה, כרצוי.
+     ------------------------------------------------------------ */
+  var MATH_RUN = /[0-9\u00D7\u00F7:=+\-.,\s()]+/g;
+  var STARTS   = /[0-9(]/;
+  var ENDS     = /[0-9)]/;
+  var HAS_OP   = /[\u00D7\u00F7:=]/;
+
+  /** תיבת תרגיל: bdi עם כיוון קבוע, בלי לעבור שוב דרך el */
+  function mathBox(text) {
+    var node = doc.createElement('bdi');
+    node.className = 'math';
+    node.setAttribute('dir', 'ltr');
+    node.textContent = text;
+    return node;
+  }
+
+  /** מחזיר רשימת מקטעים, או null כשאין בטקסט תרגיל כזה */
+  function mathSplit(str) {
+    var parts = [], last = 0, m;
+    MATH_RUN.lastIndex = 0;
+    while ((m = MATH_RUN.exec(str)) !== null) {
+      var raw = m[0], a = 0, b = raw.length;
+      while (a < b && !STARTS.test(raw.charAt(a))) a++;
+      while (b > a && !ENDS.test(raw.charAt(b - 1))) b--;
+      var core = raw.slice(a, b);
+      if (core.length < 3 || !HAS_OP.test(core)) continue;
+      var from = m.index + a, to = m.index + b;
+      if (from > last) parts.push(str.slice(last, from));
+      parts.push(mathBox(core));
+      last = to;
+    }
+    if (!parts.length) return null;
+    if (last < str.length) parts.push(str.slice(last));
+    return parts;
+  }
+
+  /** צומת טקסט שבו כל תרגיל חשבון מבודד לכיוון שמאל־לימין */
+  function math(str) {
+    str = String(str);
+    var parts = mathSplit(str);
+    if (!parts) return doc.createTextNode(str);
+    var frag = doc.createDocumentFragment();
+    parts.forEach(function (p) {
+      frag.appendChild(typeof p === 'string' ? doc.createTextNode(p) : p);
+    });
+    return frag;
   }
 
   /** הכרזה לקוראי מסך (aria-live) */
@@ -157,6 +218,7 @@
     el: el,
     clear: clear,
     num: num,
+    math: math,
     announce: announce,
     toast: toast,
     progressBar: progressBar,

@@ -67,6 +67,16 @@ button { cursor: pointer; }
   font-variant-numeric: tabular-nums;
 }
 
+/* An arithmetic expression sitting inside a Hebrew sentence. The operators
+   are bidi-neutral, so without this the whole exercise renders mirrored.
+   Marked up automatically by UI.math(). */
+.math, bdi.math {
+  unicode-bidi: isolate;
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .formula {
   unicode-bidi: isolate;
   direction: rtl;             /* Hebrew words inside the formula stay RTL */

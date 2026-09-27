@@ -400,7 +400,7 @@
           chosen.push(t);
           refresh();
         }
-      }, [document.createTextNode(t.text)]));
+      }, [UI.math(t.text)]));
     });
 
     refresh();
@@ -451,7 +451,7 @@
         el('ul', { class: 'concept-list concept-list--review' }, uniqueMissed.map(function (c) {
           return el('li', {}, [
             el('span', { class: 'concept-list__tick', 'aria-hidden': 'true', text: '●' }),
-            document.createTextNode(c)
+            UI.math(c)
           ]);
         }))
       ]));
@@ -464,7 +464,7 @@
           el('ul', { class: 'concept-list' }, uniq.map(function (c) {
             return el('li', {}, [
               el('span', { class: 'concept-list__tick', 'aria-hidden': 'true', text: '✔' }),
-              document.createTextNode(c)
+              UI.math(c)
             ]);
           }))
         ]));
@@ -678,7 +678,7 @@
       function para(text) { return el('p', { class: 'feedback__why', text: text }); }
       function note(text) {
         return el('p', { class: 'feedback__note' }, [
-          el('strong', { text: 'שימו לב: ' }), document.createTextNode(text)
+          el('strong', { text: 'שימו לב: ' }), UI.math(text)
         ]);
       }
 

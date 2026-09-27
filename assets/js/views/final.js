@@ -218,7 +218,7 @@
           el('ul', { class: 'concept-list concept-list--review' }, weakTopics.map(function (t) {
             return el('li', {}, [
               el('span', { class: 'concept-list__tick', 'aria-hidden': 'true', text: '●' }),
-              document.createTextNode(t)
+              UI.math(t)
             ]);
           }))
         ]));
@@ -240,13 +240,13 @@
           el('p', { text: item.prompt }),
           el('p', { class: 'review-answer' }, [
             el('strong', { text: 'התשובה שלכם: ' }),
-            document.createTextNode(picked ? picked.text : 'לא נבחרה תשובה')
+            UI.math(picked ? picked.text : 'לא נבחרה תשובה')
           ]),
           a.correct ? null : el('p', { class: 'review-answer' }, [
             el('strong', { text: 'התשובה הנכונה: ' }),
-            document.createTextNode(right ? right.text : 'לא זמינה')
+            UI.math(right ? right.text : 'לא זמינה')
           ]),
-          el('p', { class: 'feedback__note' }, [document.createTextNode(item.why)])
+          el('p', { class: 'feedback__note' }, [UI.math(item.why)])
         ]);
       }));
 
