@@ -3,7 +3,7 @@
 Every asset shipped in this repository, where it came from, and under what licence.
 Kept current as required by §12 of [PROJECT-SPEC.md](PROJECT-SPEC.md).
 
-Last verified: **2026-09-15**, against commit `89238bf`.
+Last verified: **2026-09-27**, against commit `0afb181`.
 
 ---
 
@@ -16,9 +16,9 @@ that comes with reusing pictures, and it keeps the repository small.
 
 | File type | Count | Notes |
 |---|---|---|
-| `.js` | 29 | 27 original, 2 vendored (Three.js, OrbitControls) |
-| `.css` | 6 | all original |
-| `.md` | 3 | all original |
+| `.js` | 32 | 30 original, 2 vendored (Three.js, OrbitControls) |
+| `.css` | 7 | all original |
+| `.md` | 5 | all original |
 | `.html` | 1 | original |
 | Images / video / audio / fonts | **0** | none tracked |
 
@@ -32,6 +32,10 @@ that comes with reusing pictures, and it keeps the repository small.
 | Pyramid nets and the fold animation | `assets/js/geometry/net-view.js` | Computed from the same geometry data |
 | Special solids (cone, cuboid, triangular prism, truncated pyramid, oblique pyramid, labelled pyramid) | `assets/js/shapes.js` | Coordinates worked out specifically for this project |
 | Brand mark and decorative pyramid outline | `assets/js/icons.js` | Original inline SVG |
+| The desert scene on the home page — sky, sun, clouds, three pyramids, dunes, palms | `assets/js/scene.js` | Drawn from plain geometric shapes written for this project. Nothing is traced from the design reference, and no picture file is loaded. It is decoration, so it carries `aria-hidden` |
+| The pyramid that builds itself on the unit-completion screen, and the confetti | `assets/js/celebrate.js` | Seven trapezoid courses computed in the file, plus a radial glow. Original |
+| Composite figures for the word problems — two packets side by side, a structure in two parts | `assets/js/figures.js` | Composed from the shared geometry engine, at one shared scale, so the drawing cannot contradict the numbers in the question |
+| Measurement labels and their leader lines on figures | `assets/js/geometry/solid-view.js` | Positions computed from the geometry itself, not hand-placed |
 | Favicon | `index.html` (inline `data:` URI) | Original inline SVG, two paths |
 | All activity content — 102 questions, explanations, misconception notes, feedback | `data/unit-1.js`, `data/unit-2.js` | Newly written in Hebrew for this project |
 | Final exam — 12 items with topics and explanations | `data/final-exam.js` | Newly written |

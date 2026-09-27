@@ -219,3 +219,13 @@
   .cert__name { font-size: var(--fs-lg); }
   .formula-line { font-size: var(--fs-lg); }
 }
+
+/* טבלת ההתקדמות: שם התחנה הוא קישור, ולכן הוא צריך שטח נגיעה
+   של 44 פיקסלים לפחות, כמו כל יעד מגע אחר באתר. */
+table.data td a {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 44px;
+  padding-block: var(--sp-1);
+}

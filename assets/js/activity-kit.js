@@ -360,7 +360,7 @@
 
   /* ---------- בניית נוסחה / סידור אריחים ---------- */
   Inputs.build = function (q, onAnswer) {
-    var el = App.UI.el;
+    var el = App.UI.el, UI = App.UI;
     var slots = [];
     var chosen = [];
 
