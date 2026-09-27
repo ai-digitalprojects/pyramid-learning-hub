@@ -47,12 +47,22 @@
     var UI = App.UI, el = UI.el;
     var D = global.PyramidData, S = D.strings;
 
-    var brand = el('a', { class: 'brand', href: '#/' }, [
-      App.icons.brand('brand__mark'),
-      el('span', { class: 'brand__text' }, [
-        el('span', { class: 'brand__title', text: S.site.title }),
-        el('span', { class: 'brand__sub', text: S.site.tagline })
-      ])
+    /* ------------------------------------------------------------
+       סדר הפריטים בכותרת
+       ------------------------------------------------------------
+       הסדר נקבע: שלום תלמיד/ה, ההתקדמות שלי, ארגז הכלים, מבחן סיום,
+       דף הבית. במסך רחב זה הסדר משמאל לימין, ובמסך צר מלמעלה למטה.
+
+       כדי שהסדר לא יתהפך בגלל שהדף כולו בכיוון ימין־לשמאל, שורת
+       הכותרת מסודרת בכיוון שמאל־לימין (ראו .site-header__inner
+       ב-home.css), וכל פריט בתוכה מחזיר לעצמו כיוון עברי. כך סדר
+       ה-DOM, הסדר על המסך וסדר מקש Tab זהים לחלוטין.
+       ------------------------------------------------------------ */
+
+    /* ברכה בלבד. אין כאן שם, אין הרשמה ואין שמירה של שום פרט אישי. */
+    var hello = el('p', { class: 'site-hello' }, [
+      el('span', { class: 'site-hello__mark', 'aria-hidden': 'true', text: '👋' }),
+      el('span', { text: S.site.greeting })
     ]);
 
     function pill(href, key, glyph, label) {
@@ -63,20 +73,22 @@
     }
 
     var nav = el('nav', { class: 'site-nav', 'aria-label': 'ניווט ראשי' }, [
-      pill('#/', 'home', '🏠', S.nav.home),
-      pill('#/final', 'final', '🏆', D.finalExam.title),
+      pill('#/progress', 'progress', '⭐', S.nav.progress),
       pill('#/toolbox', 'toolbox', '🧰', S.nav.toolbox),
-      pill('#/progress', 'progress', '⭐', S.nav.progress)
+      pill('#/final', 'final', '🏆', D.finalExam.title),
+      pill('#/', 'home', '🏠', S.nav.home)
     ]);
 
-    /* ברכה בלבד. אין כאן שם, אין הרשמה ואין שמירה של שום פרט אישי. */
-    var hello = el('p', { class: 'site-hello' }, [
-      el('span', { class: 'site-hello__mark', 'aria-hidden': 'true', text: '👋' }),
-      el('span', { text: S.site.greeting })
+    var brand = el('a', { class: 'brand', href: '#/' }, [
+      App.icons.brand('brand__mark'),
+      el('span', { class: 'brand__text' }, [
+        el('span', { class: 'brand__title', text: S.site.title }),
+        el('span', { class: 'brand__sub', text: S.site.tagline })
+      ])
     ]);
 
     doc.getElementById('site-header').appendChild(
-      el('div', { class: 'site-header__inner' }, [brand, nav, hello])
+      el('div', { class: 'site-header__inner' }, [hello, nav, brand])
     );
   }
 
@@ -118,8 +130,8 @@
         fn(mount, params || {});
         App.UI.scrollTop();
         // הכרזה לקוראי מסך על מעבר מסך
-        var h1 = mount.querySelector('h1');
-        if (h1) App.UI.announce(h1.textContent);
+var h1 = mount.querySelector('h1');
+        if (h1) App.UI.announce(App.UI.readable(h1));
       };
     }
 

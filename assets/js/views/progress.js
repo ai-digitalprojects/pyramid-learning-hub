@@ -98,8 +98,7 @@
         rows.push(el('tr', {}, [
           el('td', {}, [
             el('a', { href: '#/activity/' + act.id }, [
-              el('span', { class: 'num', text: act.id }),
-              document.createTextNode('  ' + act.title)
+              UI.numTitle(act.id, act.title)
             ])
           ]),
           el('td', { text: u.short }),

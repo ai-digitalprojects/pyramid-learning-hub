@@ -38,10 +38,7 @@
     var head = el('div', { class: 'unit-banner unit-banner--' + unit.id }, [
       el('div', { class: 'unit-banner__icon', 'aria-hidden': 'true', text: act.icon }),
       el('div', { class: 'unit-banner__body' }, [
-        el('h1', {}, [
-          el('span', { class: 'num', style: 'color:var(--text-muted)', text: act.id + '  ' }),
-          document.createTextNode(act.title)
-        ]),
+        el('h1', {}, [UI.numTitle(act.id, act.title, 'num-title--head')]),
         el('p', { text: act.desc })
       ]),
       /* מסומן במזהה התחנה. מאזין יחיד ב-main.js מרענן את השבב ברגע

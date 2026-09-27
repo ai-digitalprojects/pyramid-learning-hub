@@ -155,3 +155,22 @@ button { cursor: pointer; }
   body { background: #fff; }
   .page { max-inline-size: none; padding: 0; }
 }
+
+/* ---------- מספר תחנה לצד שמה ----------
+   המרווח נקבע כאן ולא ברווח מוקלד: רווח שנכתב בטקסט נבלע על גבול
+   הבידוד הדו־כיווני של המספר ואינו מופיע על המסך. */
+.num-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.num-title__num {
+  flex: none;
+  white-space: nowrap;   /* "2.10" לעולם לא נשבר באמצע */
+}
+
+.num-title__text { min-inline-size: 0; }
+
+/* בכותרת העמוד המספר עמום יותר מהשם */
+.num-title--head .num-title__num { color: var(--text-muted); }

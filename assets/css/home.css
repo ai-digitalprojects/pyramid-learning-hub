@@ -4,6 +4,40 @@
    הצבעים כולם מגיעים מ-tokens.css. כאן נקבע רק המבנה.
    ============================================================ */
 
+/* ---------- סדר הכותרת העליונה ----------
+   הדף כולו בכיוון ימין־לשמאל, אבל סדר הפריטים בכותרת נקבע מראש:
+   שלום תלמיד/ה, ההתקדמות שלי, ארגז הכלים, מבחן סיום, דף הבית.
+   השורה מסודרת בכיוון שמאל־לימין כדי שסדר ה-DOM יהיה גם הסדר על
+   המסך וגם סדר מקש Tab, וכל פריט בתוכה מחזיר לעצמו כיוון עברי. */
+.site-header__inner {
+  direction: ltr;
+  justify-content: flex-start;
+}
+
+.site-header__inner > * { direction: rtl; }
+
+.site-header__inner .brand { margin-inline: auto 0; }
+
+/* גם בתוך הניווט הסדר נקבע ב-DOM ולא בכיוון הדף, וכל כפתור
+   מחזיר לעצמו כיוון עברי לטקסט שבתוכו. */
+.site-nav {
+  direction: ltr;
+  flex-wrap: wrap;
+}
+
+.site-nav .nav-btn { direction: rtl; }
+
+/* במסך צר הכול נערם, באותו סדר, עם שם האתר למעלה */
+@media (max-width: 860px) {
+  .site-header__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .site-header__inner .brand { order: -1; margin-inline: 0; }
+  .site-nav { flex-direction: column; }
+  .site-nav .nav-btn { justify-content: flex-start; }
+}
+
 /* ---------- ברכה בכותרת העליונה ---------- */
 .site-hello {
   display: inline-flex;
@@ -20,11 +54,6 @@
 }
 
 .nav-btn__glyph { font-size: 1.05em; }
-
-/* במסך צר הברכה יורדת לשורה משלה ולא דוחקת את הניווט */
-@media (max-width: 860px) {
-  .site-hello { order: 3; flex-basis: 100%; justify-content: center; }
-}
 
 /* ============================================================
    הכותרת הגדולה: נוף מדבר מצויר, וטקסט אמיתי מעליו
