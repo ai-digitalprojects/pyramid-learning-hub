@@ -729,7 +729,15 @@
         UI.announce((correct ? 'נכון. ' : 'לא מדויק. ') + title);
       }
 
-      function para(text) { return el('p', { class: 'feedback__why', text: text }); }
+      /* הסבר הוא בדרך כלל משפט אחד. כשהוא בנוי מכמה שלבים
+         אפשר לתת במקומו פונקציה שבונה את הצמתים, והם
+         נכנסים כמות שהם. מחרוזת ממשיכה להתנהג כמו קודם. */
+      function para(why) {
+        if (typeof why === 'function') {
+          return el('div', { class: 'feedback__why' }, [].concat(why()));
+        }
+        return el('p', { class: 'feedback__why', text: why });
+      }
       function note(text) {
         return el('p', { class: 'feedback__note' }, [
           el('strong', { text: 'שימו לב: ' }), UI.math(text)

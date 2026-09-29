@@ -221,6 +221,34 @@
   line-height: 1.65;
 }
 
+/* הסבר בנוי משלבים: שורות קצרות במקום פסקה אחת צפופה.
+   המספור מגיע מה-ol עצמו, ולכן הוא נשאר נכון גם אם שלב
+   יתווסף או יוסר, וקורא מסך מכריז על רשימה בת שני פריטים. */
+.why-lead { margin-block-end: var(--sp-3); }
+
+.why-steps {
+  margin: 0 0 var(--sp-3);
+  padding-inline-start: var(--sp-5);
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.why-step__head { margin: 0 0 var(--sp-1); font-weight: 600; }
+
+.why-step__line {
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* התרגיל עומד בשורה משלו, כדי שייקרא בבירור גם במסך צר */
+.why-step__math {
+  margin: var(--sp-2) 0;
+  font-size: var(--fs-md);
+}
+
+.why-close { margin: 0 0 var(--sp-2); line-height: 1.7; }
+.why-close:last-child { margin-block-end: 0; }
+
 /* ============================================================
    תזכורת מתקפלת
    ============================================================ */

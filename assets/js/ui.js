@@ -133,6 +133,30 @@
     return frag;
   }
 
+  /* ------------------------------------------------------------
+     תרגיל שנקרא משמאל לימין בתוך דף בעברית
+     ------------------------------------------------------------
+     dir לבדו אינו מספיק: שני איברים סמוכים שאינם ספרות
+     מצטרפים לרצף אחד ומתחלפים ביניהם. לכן כל אסימון
+     הוא אלמנט נפרד בשורת inline-flex, והסדר על המסך הוא
+     סדר ה-DOM בלבד. מה שכתוב ראשון מופיע שמאלי ביותר, וזה
+     גם הסדר שקורא מסך מקריא.
+
+     מקבל רשימת אסימונים, למשל ['9', '×', '3', '=', '27', '₪'].
+     ------------------------------------------------------------ */
+  var OPERATOR = /^[=+−×÷:-]$/;
+
+  function equation(tokens) {
+    return el('span', { class: 'formula-ltr', dir: 'ltr' },
+      tokens.map(function (t) {
+        var text = String(t);
+        return el('span', {
+          class: OPERATOR.test(text) ? 'formula-tok formula-op' : 'formula-tok',
+          text: text
+        });
+      }));
+  }
+
   /** הכרזה לקוראי מסך (aria-live) */
   function announce(message) {
     var region = doc.getElementById('a11y-announcer');
@@ -255,6 +279,7 @@
     numTitle: numTitle,
     readable: readable,
     math: math,
+    equation: equation,
     announce: announce,
     toast: toast,
     progressBar: progressBar,
