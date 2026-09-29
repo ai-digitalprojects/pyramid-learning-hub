@@ -572,3 +572,14 @@ circle.pp-hl {
   font-weight: 700;
   color: var(--text-muted);
 }
+
+/* ---------- אריזות פופקורן (פעילות 2.10, שאלה 3) ----------
+   האיור צריך להיקרא כאריזת מזון ולא כגוף הנדסי חשוף, ולכן יש לו
+   חזית צבעונית, פסים וגרעינים. הצורה עצמה נשארת תיבה ופירמידה
+   מדויקות, כדי שההשוואה בין הנפחים תישאר נכונה. */
+.pop-front   { fill: var(--gold);   fill-opacity: .30; }
+.pop-stripe  { fill: var(--warn);   fill-opacity: .28; }
+.pop-kernel  { fill: #F6E2A8; stroke: var(--gold-deep); stroke-width: 1.2; }
+
+/* המבנה המורכב (פעילות 2.10, שאלה 4) מצויר גבוה יותר מרחב */
+.combo__stack { inline-size: min(300px, 100%); block-size: auto; }

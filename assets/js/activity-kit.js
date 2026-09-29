@@ -364,7 +364,14 @@
     var slots = [];
     var chosen = [];
 
-    var slotRow = el('div', { class: 'build-slots', role: 'group', 'aria-label': 'הנוסחה שאתם בונים' });
+    /* הנוסחה שנבנית נקראת משמאל לימין. dir מפורש על השורה עושה את
+       סדר המשבצות על המסך זהה לסדר שבו התלמיד הניח אותן ולסדר ה-DOM,
+       ולכן גם קורא מסך מקריא אותה באותו סדר. הטקסט העברי בתוך כל
+       משבצת ממשיך להיקרא מימין לשמאל כרגיל. */
+    var slotRow = el('div', {
+      class: 'build-slots', dir: 'ltr',
+      role: 'group', 'aria-label': 'הנוסחה שאתם בונים'
+    });
     var tileRow = el('div', { class: 'build-tiles', role: 'group', 'aria-label': 'אריחים לבחירה' });
 
     function refresh() {

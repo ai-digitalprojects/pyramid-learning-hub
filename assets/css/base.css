@@ -85,6 +85,37 @@ button { cursor: pointer; }
   white-space: nowrap;
 }
 
+/* A formula that reads left to right inside the right-to-left page.
+   The direction is carried by the element's own dir attribute; this rule
+   only supplies the typography and stops the formula wrapping mid-way.
+   Nothing here reorders text, so assistive technology reads it in the
+   same order it is written. */
+.formula-ltr {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: .18em;
+  font-family: var(--font-body);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* נוסחה שלמה ארוכה מדי לשורה אחת במסך צר, לכן היא
+   עוברת שורה במקום לחרוג מהמסך. השבירה היא בין אסימונים
+   בלבד, והסדר שלהם נשמר. */
+.formula-ltr--wrap {
+  flex-wrap: wrap;
+  white-space: normal;
+}
+
+.formula-ltr--wrap > * { white-space: nowrap; }
+
+/* אופרנד עברי: מבודד, כך שהכיוון שבתוכו אינו משפיע על סדר האיברים */
+.formula-term { unicode-bidi: isolate; }
+
+/* סימני פעולה מקבלים מעט אוויר משני הצדדים */
+.formula-op { margin-inline: .16em; }
+
 /* ---------- Focus ---------- */
 :focus { outline: none; }
 
